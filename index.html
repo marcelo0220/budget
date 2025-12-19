@@ -193,6 +193,8 @@ h1{font-size:20px}
 <!-- ACTIONS -->
 <div class="actions">
 <button class="btn btn-primary" onclick="openModal()">➕ Nouvelle transaction</button>
+<button class="btn btn-secondary" onclick="undo()">↶ Annuler</button>
+<button class="btn btn-secondary" onclick="redo()">↷ Refaire</button>
 <button class="btn btn-secondary" onclick="exportData()">📊 Exporter</button>
 <button class="btn btn-secondary" onclick="resetData()">🧹 Reset</button>
 <button class="btn btn-secondary" onclick="generateReport()">📈 Rapport</button>
@@ -298,11 +300,14 @@ let selectedCategory = -1;
 let chart = null;
 let customBudget = JSON.parse(localStorage.getItem('budgetProCustomBudget') || '{}');
 let goals = JSON.parse(localStorage.getItem('budgetProGoals') || '[]');
+let history = [];
+let historyIndex = -1;
 
 // INIT
 document.addEventListener('DOMContentLoaded', function() {
 loadUI();
 renderAll();
+saveState();
 });
 
 function formatAr(v) {
@@ -422,6 +427,7 @@ if (selectedCategory === -1) {
 showToast('⚠️ Choisissez une catégorie', 'warning');
 return;
 }
+saveState();
 const type = document.getElementById('transactionType').value;
 const amount = Number(document.getElementById('amount').value);
 const desc = document.getElementById('description').value;
@@ -600,6 +606,7 @@ updateChart();
 
 function deleteTransaction(id) {
 if (confirm('Supprimer cette transaction ?')) {
+saveState();
 transactions = transactions.filter(t => t.id !== id);
 localStorage.setItem('budgetProTransactions', JSON.stringify(transactions));
 renderAll();
@@ -658,6 +665,7 @@ document.body.style.overflow = '';
 
 function addGoal(e) {
 e.preventDefault();
+saveState();
 const name = document.getElementById('goalName').value;
 const target = Number(document.getElementById('goalTarget').value);
 const deadline = document.getElementById('goalDeadline').value;
@@ -707,7 +715,10 @@ html += `
 </div>
 <div style="display:flex;justify-content:space-between;font-size:12px;opacity:0.8;">
 <span>Échéance: ${new Date(goal.deadline).toLocaleDateString('fr-FR')}</span>
+<div style="display:flex;gap:8px">
 <button onclick="addToGoal(${goal.id})" style="background:#4ecdc4;color:#fff;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;">➕ Ajouter</button>
+<button onclick="deleteGoal(${goal.id})" style="background:#ff6b6b;color:#fff;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;">🗑️ Supprimer</button>
+</div>
 </div>
 </div>`;
 });
@@ -718,6 +729,7 @@ document.getElementById('goalsList').innerHTML = html;
 function addToGoal(id) {
 const amount = prompt('Montant à ajouter (Ar):');
 if (amount && !isNaN(amount)) {
+saveState();
 const goal = goals.find(g => g.id === id);
 if (goal) {
 goal.current += Number(amount);
@@ -725,6 +737,67 @@ localStorage.setItem('budgetProGoals', JSON.stringify(goals));
 renderGoals();
 showToast(`➕ ${formatAr(Number(amount))} ajouté à ${goal.name}`);
 }
+}
+}
+
+function deleteGoal(id) {
+if (confirm('Supprimer cet objectif ?')) {
+saveState();
+goals = goals.filter(g => g.id !== id);
+localStorage.setItem('budgetProGoals', JSON.stringify(goals));
+renderGoals();
+showToast('🗑️ Objectif supprimé');
+}
+}
+
+function saveState() {
+const state = {
+transactions: JSON.parse(JSON.stringify(transactions)),
+goals: JSON.parse(JSON.stringify(goals)),
+savings: savings
+};
+historyIndex++;
+if (historyIndex < history.length) {
+history = history.slice(0, historyIndex);
+}
+history.push(state);
+if (history.length > 50) {
+history.shift();
+historyIndex--;
+}
+}
+
+function undo() {
+if (historyIndex > 0) {
+historyIndex--;
+const state = history[historyIndex];
+transactions = JSON.parse(JSON.stringify(state.transactions));
+goals = JSON.parse(JSON.stringify(state.goals));
+savings = state.savings;
+localStorage.setItem('budgetProTransactions', JSON.stringify(transactions));
+localStorage.setItem('budgetProGoals', JSON.stringify(goals));
+localStorage.setItem('budgetProSavings', savings);
+renderAll();
+showToast('↶ Annulé');
+} else {
+showToast('❌ Rien à annuler');
+}
+}
+
+function redo() {
+if (historyIndex < history.length - 1) {
+historyIndex++;
+const state = history[historyIndex];
+transactions = JSON.parse(JSON.stringify(state.transactions));
+goals = JSON.parse(JSON.stringify(state.goals));
+savings = state.savings;
+localStorage.setItem('budgetProTransactions', JSON.stringify(transactions));
+localStorage.setItem('budgetProGoals', JSON.stringify(goals));
+localStorage.setItem('budgetProSavings', savings);
+renderAll();
+showToast('↷ Refait');
+} else {
+showToast('❌ Rien à refaire');
 }
 }
 </script>
