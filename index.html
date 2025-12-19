@@ -157,7 +157,7 @@ h1{font-size:20px}
 .container{padding-bottom:80px}
 
 /* FLOATING ACTION BUTTON */
-.fab{position:fixed;bottom:100px;right:20px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;font-size:24px;cursor:pointer;z-index:1001;box-shadow:0 4px 20px rgba(63,81,181,0.4);transition:all 0.3s}
+.fab{position:fixed;bottom:100px;right:calc(20px + var(--scrollbar-width, 0px));width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;font-size:24px;cursor:pointer;z-index:1001;box-shadow:0 4px 20px rgba(63,81,181,0.4);transition:all 0.3s}
 .fab:hover{transform:scale(1.1);box-shadow:0 6px 25px rgba(63,81,181,0.6)}
 .fab:active{transform:scale(0.95)}
 </style>
@@ -392,6 +392,10 @@ document.addEventListener('DOMContentLoaded', function() {
 loadUI();
 renderAll();
 saveState();
+
+// Calculate scrollbar width and set CSS variable
+const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+document.documentElement.style.setProperty('--scrollbar-width', scrollbarWidth + 'px');
 });
 
 function formatAr(v) {
