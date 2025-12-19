@@ -183,6 +183,46 @@ h1{font-size:20px}
 <p style="font-size:14px;opacity:0.8;margin:0">Gérez votre budget intelligemment avec des suggestions personnalisées, des alertes et un suivi en temps réel de vos finances.</p>
 </div>
 
+<!-- MONTHLY SUMMARY -->
+<div class="balance-card">
+<h3 style="margin-bottom:16px">📊 Résumé mensuel</h3>
+<div class="stats-grid" style="margin:0">
+<div class="stat-card"><div class="balance-label">💰 Revenus</div><div class="balance-amount" id="monthlyIncome">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">💸 Dépenses</div><div class="balance-amount" id="monthlyExpenses">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">⚖️ Solde net</div><div class="balance-amount" id="monthlyNet">0 Ar</div></div>
+</div>
+</div>
+
+<!-- SMART ALERT -->
+<div class="balance-card" id="smartAlert" style="display:none">
+<h3 style="margin-bottom:8px">🚨 Alerte intelligente</h3>
+<p id="alertMessage"></p>
+</div>
+
+<!-- LAST TRANSACTIONS -->
+<div class="balance-card">
+<h3 style="margin-bottom:16px">📋 Dernières transactions</h3>
+<div id="lastTransactions"></div>
+</div>
+
+<!-- SAVINGS PROGRESS -->
+<div class="balance-card">
+<h3 style="margin-bottom:16px">💎 Progression épargne</h3>
+<div style="margin-bottom:8px;">
+<span>Épargne actuelle: <strong id="currentSavings">0 Ar</strong></span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill progress-ok" id="savingsProgress" style="width:0%"></div>
+</div>
+<p style="font-size:12px;opacity:0.8;margin-top:8px">Objectif mensuel: <span id="savingsTarget">0 Ar</span></p>
+</div>
+
+<!-- AI TIP -->
+<div class="balance-card">
+<h3 style="margin-bottom:8px">🤖 Conseil IA</h3>
+<p id="aiTip">Analyzing your data...</p>
+</div>
+
 <!-- STATS -->
 <div class="stats-grid">
 <div class="stat-card"><div class="balance-label">💰 Budget total</div><div class="balance-amount" id="totalBudget">0 Ar</div></div>
@@ -720,6 +760,11 @@ renderTransactions();
 renderSuggestions();
 renderGoals();
 updateChart();
+updateMonthlySummary();
+updateSmartAlert();
+updateLastTransactions();
+updateSavingsProgress();
+updateAITip();
 }
 
 function deleteTransaction(id) {
@@ -917,6 +962,123 @@ showToast('↷ Refait');
 } else {
 showToast('❌ Rien à refaire');
 }
+}
+
+function updateMonthlySummary() {
+const now = new Date();
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+const monthlyTransactions = transactions.filter(t => {
+const date = new Date(t.date);
+return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+});
+
+const income = monthlyTransactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+const expenses = Math.abs(monthlyTransactions.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0));
+const net = income - expenses;
+
+document.getElementById('monthlyIncome').textContent = formatAr(income);
+document.getElementById('monthlyExpenses').textContent = formatAr(expenses);
+document.getElementById('monthlyNet').textContent = formatAr(net);
+}
+
+function updateSmartAlert() {
+const balance = transactions.reduce((s, t) => s + t.amount, 0);
+const resteAVivre = balance - savings;
+const minReste = 50000 * peopleCount;
+
+let alertMessage = '';
+let showAlert = false;
+
+if (resteAVivre < minReste) {
+alertMessage = `⚠️ Votre reste à vivre (${formatAr(resteAVivre)}) est inférieur au minimum recommandé (${formatAr(minReste)}).`;
+showAlert = true;
+} else if (balance < 0) {
+alertMessage = `🚨 Votre solde est négatif (${formatAr(balance)}). Pensez à réduire vos dépenses.`;
+showAlert = true;
+} else if (savings < monthlyBudget * 0.1) {
+alertMessage = `💡 Pensez à augmenter votre épargne. Objectif recommandé: ${formatAr(monthlyBudget * 0.2)}.`;
+showAlert = true;
+}
+
+const alertDiv = document.getElementById('smartAlert');
+if (showAlert) {
+document.getElementById('alertMessage').textContent = alertMessage;
+alertDiv.style.display = 'block';
+} else {
+alertDiv.style.display = 'none';
+}
+}
+
+function updateLastTransactions() {
+const lastTransactions = transactions.slice(0, 5);
+let html = '';
+
+if (lastTransactions.length === 0) {
+html = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.6)">Aucune transaction récente</div>';
+} else {
+lastTransactions.forEach(t => {
+const isPositive = t.amount > 0;
+html += `
+<div class="transaction-item">
+<div class="transaction-info">
+<div class="transaction-icon" style="background:${t.color}30">${t.icon}</div>
+<div>
+<strong>${t.description}</strong>
+<br><small>${t.category} · ${new Date(t.date).toLocaleDateString('fr-FR')}</small>
+</div>
+</div>
+<div class="transaction-amount ${isPositive ? 'positive' : 'negative'}">
+${isPositive ? '+' : ''}${formatAr(Math.abs(t.amount))}
+</div>
+</div>`;
+});
+}
+
+document.getElementById('lastTransactions').innerHTML = html;
+}
+
+function updateSavingsProgress() {
+const savingsTarget = monthlyBudget * 0.2; // 20% of monthly budget as target
+const progress = savingsTarget > 0 ? (savings / savingsTarget * 100) : 0;
+
+document.getElementById('currentSavings').textContent = formatAr(savings);
+document.getElementById('savingsTarget').textContent = formatAr(savingsTarget);
+
+const progressBar = document.getElementById('savingsProgress');
+progressBar.style.width = Math.min(progress, 100) + '%';
+
+if (progress >= 100) {
+progressBar.className = 'progress-fill progress-ok';
+} else if (progress > 50) {
+progressBar.className = 'progress-fill progress-warning';
+} else {
+progressBar.className = 'progress-fill progress-danger';
+}
+}
+
+function updateAITip() {
+const balance = transactions.reduce((s, t) => s + t.amount, 0);
+const income = transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+const expenses = Math.abs(transactions.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0));
+const savingsRate = income > 0 ? (savings / income * 100) : 0;
+
+let tip = '';
+
+if (balance < 0) {
+tip = "Votre solde est négatif. Priorisez le paiement des dettes et réduisez les dépenses non essentielles.";
+} else if (savingsRate < 10) {
+tip = `Votre taux d'épargne est de ${Math.round(savingsRate)}%. Essayez d'économiser au moins 20% de vos revenus.`;
+} else if (expenses > income * 0.8) {
+tip = "Vos dépenses représentent plus de 80% de vos revenus. Cherchez des moyens de réduire vos coûts.";
+} else if (transactions.length < 5) {
+tip = "Ajoutez plus de transactions pour obtenir des analyses plus précises de votre budget.";
+} else {
+tip = "Votre gestion budgétaire semble équilibrée. Continuez à suivre vos dépenses régulièrement !";
+}
+
+document.getElementById('aiTip').textContent = tip;
 }
 
 function showSection(sectionId, event) {
