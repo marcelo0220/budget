@@ -187,6 +187,17 @@ h1{
   border:2px solid rgba(26,35,126,.2)
 }
 
+.form-inline{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:6px
+}
+
+.form-inline input[type="checkbox"]{
+  width:auto;
+}
+
 .category-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -208,17 +219,6 @@ h1{
   background:rgba(63,81,181,.15)
 }
 
-.toast{
-  position:fixed;
-  bottom:30px;
-  right:30px;
-  background:var(--glass);
-  padding:18px 24px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.2)
-}
-
-/* section enveloppes */
 .envelopes{
   background:var(--glass);
   padding:20px;
@@ -242,6 +242,26 @@ h1{
 .envelope-name{font-weight:600;font-size:14px}
 .envelope-amount{font-size:14px}
 .envelope-warning{color:#ff6b6b;font-size:12px}
+
+.profile-badges{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+  flex-wrap:wrap
+}
+
+.profile-badge{
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+  font-size:12px;
+  cursor:pointer
+}
+
+.profile-badge.active{
+  background:rgba(255,215,0,0.2);
+  border-color:#ffd700
+}
 </style>
 </head>
 
@@ -263,6 +283,21 @@ h1{
   <div class="form-group">
     <label>Nombre de personnes au foyer</label>
     <input type="number" id="peopleCount" min="1" value="1" oninput="saveConfig()">
+  </div>
+  <div class="form-group">
+    <label>Logement</label>
+    <div class="form-inline">
+      <input type="checkbox" id="payRent" onchange="saveConfig()">
+      <span class="balance-label">Je paye un loyer / crédit logement</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Profil de budget</label>
+    <div class="profile-badges">
+      <div class="profile-badge" data-profile="security" onclick="selectProfile('security')">Sécurité (plus d’épargne)</div>
+      <div class="profile-badge" data-profile="balanced" onclick="selectProfile('balanced')">Équilibré</div>
+      <div class="profile-badge" data-profile="comfort" onclick="selectProfile('comfort')">Confort (plus de loisirs)</div>
+    </div>
   </div>
   <div class="form-group">
     <label>Dépense nourriture conseillée</label>
@@ -388,18 +423,66 @@ const categories = {
   ]
 };
 
-// règles de budget par catégorie (portion du budget total)
-const budgetRules = {
-  'Logement': 0.35,
-  'Nourriture': 0.25,
-  'Transport': 0.10,
-  'Autres essentiels': 0.10,
-  'Loisirs': 0.10,
-  'Épargne': 0.10
+// profils de budget (percentages indicatifs inspirés de règles 50/30/20, ajustés) [web:15][web:18]
+const budgetProfiles = {
+  security: {
+    withRent: {
+      Logement: 0.35,
+      Nourriture: 0.20,
+      Transport: 0.10,
+      "Autres essentiels": 0.10,
+      Loisirs: 0.05,
+      Épargne: 0.20
+    },
+    noRent: {
+      Logement: 0.00,
+      Nourriture: 0.25,
+      Transport: 0.10,
+      "Autres essentiels": 0.10,
+      Loisirs: 0.10,
+      Épargne: 0.45
+    }
+  },
+  balanced: {
+    withRent: {
+      Logement: 0.35,
+      Nourriture: 0.25,
+      Transport: 0.10,
+      "Autres essentiels": 0.10,
+      Loisirs: 0.10,
+      Épargne: 0.10
+    },
+    noRent: {
+      Logement: 0.00,
+      Nourriture: 0.25,
+      Transport: 0.10,
+      "Autres essentiels": 0.10,
+      Loisirs: 0.20,
+      Épargne: 0.35
+    }
+  },
+  comfort: {
+    withRent: {
+      Logement: 0.35,
+      Nourriture: 0.25,
+      Transport: 0.10,
+      "Autres essentiels": 0.10,
+      Loisirs: 0.15,
+      Épargne: 0.05
+    },
+    noRent: {
+      Logement: 0.00,
+      Nourriture: 0.25,
+      Transport: 0.10,
+      "Autres essentiels": 0.10,
+      Loisirs: 0.30,
+      Épargne: 0.25
+    }
+  }
 };
 
-const MIN_RESTE_A_VIVRE = 50000;  // reste minimum à garder
-const MAX_SAVINGS_RATE = 0.2;     // 20 % max du revenu
+const MIN_RESTE_A_VIVRE = 50000;
+const MAX_SAVINGS_RATE = 0.2;
 
 let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
 let savings = parseFloat(localStorage.getItem('savings') || '0');
@@ -407,6 +490,8 @@ let selectedCategory = null;
 
 let monthlyBudget = Number(localStorage.getItem('monthlyBudget') || 0);
 let peopleCount = Number(localStorage.getItem('peopleCount') || 1);
+let payRent = localStorage.getItem('payRent') === 'true';
+let selectedProfile = localStorage.getItem('selectedProfile') || 'balanced';
 
 function formatAr(v){return new Intl.NumberFormat('fr-FR').format(v)+' Ar'}
 
@@ -535,7 +620,7 @@ function toggleTheme(){
 }
 
 function exportData(){
-  const blob=new Blob([JSON.stringify({transactions,savings,monthlyBudget,peopleCount},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({transactions,savings,monthlyBudget,peopleCount,payRent,selectedProfile},null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download='budget-pro.json';
@@ -548,9 +633,13 @@ function resetData(){
     savings = 0;
     monthlyBudget = 0;
     peopleCount = 1;
+    payRent = false;
+    selectedProfile = 'balanced';
     localStorage.clear();
     document.getElementById('monthlyBudget').value = '';
     document.getElementById('peopleCount').value = 1;
+    document.getElementById('payRent').checked = false;
+    highlightProfileBadges();
     renderTransactions();
     updateStats();
     updateBudgetAdvice();
@@ -563,14 +652,15 @@ function resetData(){
 function saveConfig(){
   monthlyBudget = Number(document.getElementById('monthlyBudget').value || 0);
   peopleCount = Number(document.getElementById('peopleCount').value || 1);
+  payRent = document.getElementById('payRent').checked;
   localStorage.setItem('monthlyBudget', monthlyBudget);
   localStorage.setItem('peopleCount', peopleCount);
+  localStorage.setItem('payRent', payRent);
   updateBudgetAdvice();
   renderSuggestions();
   renderEnvelopes();
 }
 
-// conseil nourriture
 function updateBudgetAdvice(){
   const foodBudget = monthlyBudget * 0.3;
   const perPerson = peopleCount > 0 ? foodBudget / peopleCount : 0;
@@ -581,20 +671,51 @@ function updateBudgetAdvice(){
     : 'Entrez votre budget et le nombre de personnes';
 }
 
+// gestion des profils
+function selectProfile(profile){
+  selectedProfile = profile;
+  localStorage.setItem('selectedProfile', profile);
+  highlightProfileBadges();
+  renderSuggestions();
+  renderEnvelopes();
+}
+
+function highlightProfileBadges(){
+  document.querySelectorAll('.profile-badge').forEach(b=>{
+    const p = b.getAttribute('data-profile');
+    b.classList.toggle('active', p === selectedProfile);
+  });
+}
+
+// récupérer les règles en fonction du profil + logement
+function getCurrentRules(){
+  const profile = budgetProfiles[selectedProfile] || budgetProfiles.balanced;
+  const rules = payRent ? profile.withRent : profile.noRent;
+  return rules;
+}
+
 // suggestions globales
 function getSuggestions(){
   if(!monthlyBudget || monthlyBudget <= 0){
     return null;
   }
+  const rules = getCurrentRules();
   const suggestions = {};
   let totalAssigned = 0;
-  for(const cat in budgetRules){
-    const amount = Math.round(monthlyBudget * budgetRules[cat]);
-    suggestions[cat] = amount;
-    totalAssigned += amount;
+
+  for(const cat in rules){
+    const amount = Math.round(monthlyBudget * rules[cat]);
+    if(amount > 0){
+      suggestions[cat] = amount;
+      totalAssigned += amount;
+    }
   }
+
   const diff = monthlyBudget - totalAssigned;
-  suggestions['Épargne'] = (suggestions['Épargne'] || 0) + diff;
+  if(suggestions['Épargne'] != null){
+    suggestions['Épargne'] += diff;
+  }
+
   return suggestions;
 }
 
@@ -611,7 +732,17 @@ function renderSuggestions(){
     return;
   }
 
-  text.textContent = `Voici une répartition indicative de votre budget de ${formatAr(monthlyBudget)} :`;
+  const profileLabel = selectedProfile === 'security'
+    ? 'mode Sécurité (plus d’épargne)'
+    : selectedProfile === 'comfort'
+      ? 'mode Confort (plus de loisirs)'
+      : 'mode Équilibré';
+
+  const rentPart = payRent
+    ? 'Une partie de ton budget est réservée au logement.'
+    : 'Tu ne payes pas de logement, une plus grande part va à l’épargne et aux projets.';
+
+  text.textContent = `Répartition indicative de ton budget de ${formatAr(monthlyBudget)} en ${profileLabel}. ${rentPart}`;
 
   const rows = Object.entries(suggestions).map(([cat, amount])=>{
     return `
@@ -637,7 +768,7 @@ function getCategoryStats(){
   if(suggestions){
     if(suggestions['Nourriture']) result['Nourriture'] = {allocated: suggestions['Nourriture'], spent: 0};
     if(suggestions['Transport']) result['Transport'] = {allocated: suggestions['Transport'], spent: 0};
-    if(suggestions['Logement']) result['Logement'] = {allocated: suggestions['Logement'], spent: 0};
+    if(suggestions['Logement'] && suggestions['Logement']>0) result['Logement'] = {allocated: suggestions['Logement'], spent: 0};
   }
 
   transactions.forEach(t=>{
@@ -661,7 +792,7 @@ function renderEnvelopes(){
   const keys = Object.keys(stats);
 
   if(keys.length === 0 || !monthlyBudget){
-    container.innerHTML = '<p class="balance-label">Les enveloppes apparaîtront ici lorsque vous aurez défini un budget et ajouté des dépenses.</p>';
+    container.innerHTML = '<p class="balance-label">Les enveloppes apparaîtront ici lorsque tu auras défini un budget et ajouté des dépenses (nourriture, transport, logement...).</p>';
     return;
   }
 
@@ -669,15 +800,19 @@ function renderEnvelopes(){
     const {allocated, spent} = stats[cat];
     const remaining = allocated - spent;
     const over = remaining < 0;
+    const status = over
+      ? `Tu as dépassé de ${formatAr(Math.abs(remaining))}.`
+      : `Il te reste ${formatAr(remaining)} dans cette enveloppe.`;
     return `
       <div class="envelope-row">
         <div>
           <div class="envelope-name">${cat}</div>
-          ${over ? `<div class="envelope-warning">Vous avez dépassé l’enveloppe de ${formatAr(Math.abs(remaining))}</div>` : ''}
+          <div class="envelope-warning" style="${over?'':'opacity:0.7;color:#ffd700'}">
+            ${status}
+          </div>
         </div>
         <div class="envelope-amount">
-          ${formatAr(spent)} / ${formatAr(allocated)}<br>
-          <small>${over ? 'Dépassement' : 'Reste ' + formatAr(remaining)}</small>
+          ${formatAr(spent)} / ${formatAr(allocated)}
         </div>
       </div>
     `;
@@ -695,6 +830,8 @@ const modal = document.getElementById('modal');
 // init
 document.getElementById('monthlyBudget').value = monthlyBudget || '';
 document.getElementById('peopleCount').value = peopleCount || 1;
+document.getElementById('payRent').checked = payRent;
+highlightProfileBadges();
 
 updateBudgetAdvice();
 renderSuggestions();
