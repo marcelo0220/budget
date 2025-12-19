@@ -6,7 +6,7 @@
 <title>Budget Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}:root{--primary:linear-gradient(135deg,#1a237e,#3f51b5);--accent:#ffd700;--glass:rgba(255,255,255,.1);--shadow:0 20px 40px rgba(0,0,0,.2)}body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#0a0e27,#1a237e);color:#fff;min-height:100vh}body.light{background:linear-gradient(135deg,#e3f2fd,#bbdefb);color:#1a237e}.container{max-width:1200px;margin:auto;padding:20px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.theme-toggle{width:50px;height:50px;border-radius:50%;background:var(--glass);border:1px solid rgba(255,255,255,.2);cursor:pointer;font-size:20px}.balance-card{background:var(--glass);backdrop-filter:blur(20px);border-radius:24px;padding:24px 20px;margin-bottom:18px;border:1px solid rgba(255,255,255,.2)}.balance-label{opacity:.8;font-weight:600;font-size:13px}.balance-amount{font-size:32px;font-weight:700;margin:10px 0;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:20px}.stat-card{background:var(--glass);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.2)}.stat-label{opacity:.7;font-size:13px}.stat-value{font-size:20px;font-weight:600}.positive{color:#4ecdc4}.negative{color:#ff6b6b}.actions{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}.btn{flex:1;min-width:120px;padding:12px;border:none;border-radius:14px;font-weight:600;cursor:pointer}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:var(--glass);border:1px solid rgba(255,255,255,.2);color:#fff}.search-box{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:var(--glass);color:#fff;margin-bottom:18px}.transactions{background:var(--glass);padding:20px;border-radius:24px;border:1px solid rgba(255,255,255,.2);margin-bottom:18px}.transactions h3{margin-bottom:10px;font-size:18px}.transaction-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.05);cursor:pointer}.transaction-info{display:flex;gap:12px;align-items:center}.transaction-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}.transaction-amount{font-size:16px;font-weight:600}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);align-items:flex-end;z-index:20}.modal-content{background:#fff;color:#1a237e;width:100%;max-width:600px;margin:auto;border-radius:24px 24px 0 0;padding:24px}.form-group{margin-bottom:14px}.form-group label{font-weight:600;font-size:14px;display:block;margin-bottom:4px}.form-group input,.form-group select{width:100%;padding:10px;border-radius:12px;border:2px solid rgba(26,35,126,.2)}.form-inline{display:flex;align-items:center;gap:8px;margin-top:6px}.form-inline input[type="checkbox"]{width:auto}.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.category-btn{padding:10px;border-radius:12px;border:2px solid rgba(26,35,126,.2);cursor:pointer;font-size:20px;text-align:center}.category-btn.active{border-color:#3f51b5;background:rgba(63,81,181,.15)}.envelopes{background:var(--glass);padding:20px;border-radius:24px;border:1px solid rgba(255,255,255,.2);margin-bottom:18px}.envelope-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer}.envelope-row:last-child{border-bottom:none}.envelope-name{font-weight:600;font-size:14px}.envelope-amount{font-size:14px}.envelope-warning{color:#ff6b6b;font-size:12px}.envelope-editing .envelope-name input{width:120px;padding:4px;border-radius:6px;border:1px solid #ffd700}.profile-badges{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.profile-badge{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.3);font-size:12px;cursor:pointer}.profile-badge.active{background:rgba(255,215,0,0.2);border-color:#ffd700}.suggestion-editable{cursor:pointer}.suggestion-editing input{width:100px;padding:4px;border-radius:6px;border:1px solid #ffd700;margin-left:8px}.add-category-btn{background:none;border:2px dashed rgba(255,255,255,.5);color:rgba(255,255,255,.7);font-size:24px}</style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--primary:linear-gradient(135deg,#1a237e,#3f51b5);--accent:#ffd700;--glass:rgba(255,255,255,.1);--shadow:0 20px 40px rgba(0,0,0,.2)}body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#0a0e27,#1a237e);color:#fff;min-height:100vh}body.light{background:linear-gradient(135deg,#e3f2fd,#bbdefb);color:#1a237e}.container{max-width:1200px;margin:auto;padding:20px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.theme-toggle{width:50px;height:50px;border-radius:50%;background:var(--glass);border:1px solid rgba(255,255,255,.2);cursor:pointer;font-size:20px}.balance-card{background:var(--glass);backdrop-filter:blur(20px);border-radius:24px;padding:24px 20px;margin-bottom:18px;border:1px solid rgba(255,255,255,.2)}.balance-label{opacity:.8;font-weight:600;font-size:13px}.balance-amount{font-size:32px;font-weight:700;margin:10px 0;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:20px}.stat-card{background:var(--glass);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.2)}.stat-label{opacity:.7;font-size:13px}.stat-value{font-size:20px;font-weight:600}.positive{color:#4ecdc4}.negative{color:#ff6b6b}.actions{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}.btn{flex:1;min-width:120px;padding:12px;border:none;border-radius:14px;font-weight:600;cursor:pointer}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:var(--glass);border:1px solid rgba(255,255,255,.2);color:#fff}.search-box{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:var(--glass);color:#fff;margin-bottom:18px}.transactions{background:var(--glass);padding:20px;border-radius:24px;border:1px solid rgba(255,255,255,.2);margin-bottom:18px}.transactions h3{margin-bottom:10px;font-size:18px}.transaction-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.05);cursor:pointer}.transaction-info{display:flex;gap:12px;align-items:center}.transaction-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}.transaction-amount{font-size:16px;font-weight:600}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);align-items:flex-end;z-index:20}.modal-content{background:#fff;color:#1a237e;width:100%;max-width:600px;margin:auto;border-radius:24px 24px 0 0;padding:24px;max-height:90vh;overflow-y:auto}.form-group{margin-bottom:14px}.form-group label{font-weight:600;font-size:14px;display:block;margin-bottom:4px}.form-group input,.form-group select{width:100%;padding:10px;border-radius:12px;border:2px solid rgba(26,35,126,.2)}.form-inline{display:flex;align-items:center;gap:8px;margin-top:6px}.form-inline input[type="checkbox"]{width:auto}.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.category-btn{padding:10px;border-radius:12px;border:2px solid rgba(26,35,126,.2);cursor:pointer;font-size:20px;text-align:center;transition:all .2s}.category-btn:hover{background:rgba(63,81,181,.1)}.category-btn.active{border-color:#ffd700;background:rgba(255,215,0,.2);transform:scale(1.05)}.cat-info{font-size:12px;opacity:.8;margin-top:5px;padding:4px;background:rgba(63,81,181,.1);border-radius:6px}.envelopes{background:var(--glass);padding:20px;border-radius:24px;border:1px solid rgba(255,255,255,.2);margin-bottom:18px}.envelope-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer}.envelope-row:last-child{border-bottom:none}.envelope-row:hover{background:rgba(255,255,255,.05)}.envelope-name{font-weight:600;font-size:14px}.envelope-amount{font-size:14px}.envelope-warning{color:#ff6b6b;font-size:12px}.profile-badges{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.profile-badge{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.3);font-size:12px;cursor:pointer;transition:all .2s}.profile-badge:hover{background:rgba(255,255,255,.1)}.profile-badge.active{background:rgba(255,215,0,.2);border-color:#ffd700}.suggestion-editable{cursor:pointer}.suggestion-editing input{width:100px;padding:4px;border-radius:6px;border:1px solid #ffd700;margin-left:8px}.add-category-btn{background:none;border:2px dashed rgba(255,255,255,.5);color:rgba(255,255,255,.7);font-size:24px}</style>
 </head>
 <body>
 <div class="container">
@@ -32,15 +32,15 @@
   </div>
   <div class="form-group">
     <label>Profil</label>
-    <div class="profile-badges">
-      <div class="profile-badge active" data-profile="balanced" onclick="selectProfile('balanced')">Équilibré</div>
-      <div class="profile-badge" data-profile="security" onclick="selectProfile('security')">Sécurité</div>
-      <div class="profile-badge" data-profile="comfort" onclick="selectProfile('comfort')">Confort</div>
+    <div class="profile-badges" id="profileBadges">
+      <div class="profile-badge active" data-profile="balanced">Équilibré</div>
+      <div class="profile-badge" data-profile="security">Sécurité</div>
+      <div class="profile-badge" data-profile="comfort">Confort</div>
     </div>
   </div>
 </div>
 
-<!-- SOLDE & BUDGET TOTAL -->
+<!-- BUDGET TOTAL -->
 <div class="balance-card">
   <div class="balance-label">💰 Budget total disponible</div>
   <div class="balance-amount" id="totalBudget">0 Ar</div>
@@ -68,13 +68,13 @@
 
 <div class="actions">
   <button class="btn btn-primary" onclick="openModal()">➕ Ajouter transaction</button>
-  <button class="btn btn-secondary" onclick="openCategoryModal()">📂 Gérer catégories</button>
+  <button class="btn btn-secondary" onclick="openCategoryModal()">📂 Catégories</button>
   <button class="btn btn-secondary" onclick="exportData()">📊 Export</button>
 </div>
 
 <input class="search-box" placeholder="🔍 Rechercher..." id="search" oninput="renderTransactions()">
 
-<!-- SUGGESTIONS MODIFIABLES -->
+<!-- SUGGESTIONS -->
 <div class="balance-card">
   <div class="balance-label">💡 Budget suggéré (clique pour modifier)</div>
   <div id="suggestionList"></div>
@@ -107,7 +107,7 @@
       </div>
       <div class="form-group">
         <label>Montant (Ar)</label>
-        <input type="number" id="amount" required>
+        <input type="number" id="amount" required min="0">
       </div>
       <div class="form-group">
         <label>Description</label>
@@ -116,10 +116,11 @@
       <div class="form-group">
         <label>Catégorie</label>
         <div class="category-grid" id="categories"></div>
+        <div id="selectedCatInfo" class="cat-info">⚠️ Cliquez sur une icône pour sélectionner</div>
       </div>
       <div style="display:flex;gap:10px">
-        <button class="btn btn-primary">Valider</button>
-        <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" type="submit">✅ Valider</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">❌ Annuler</button>
       </div>
     </form>
   </div>
@@ -130,12 +131,12 @@
   <div class="modal-content">
     <h2>📂 Gérer les catégories</h2>
     <div class="form-group">
-      <label>Nouvelle catégorie dépense</label>
+      <label>Nouvelle catégorie</label>
       <input type="text" id="newExpenseCategory" placeholder="Nom (ex: École)">
       <input type="text" id="newExpenseIcon" placeholder="Icône (ex: 📚)" style="margin-top:5px">
       <button class="btn btn-primary" onclick="addExpenseCategory()" style="margin-top:10px;width:100%">Ajouter</button>
     </div>
-    <h3>Catégories dépenses actuelles:</h3>
+    <h3>Catégories dépenses:</h3>
     <div id="expenseCategoriesList"></div>
     <div style="display:flex;gap:10px;margin-top:20px">
       <button class="btn btn-primary" onclick="saveCategories()">Sauvegarder</button>
@@ -145,4 +146,422 @@
 </div>
 
 <script>
-const MIN_RESTE_A_VIVRE=50000;const MAX_SAVINGS_RATE=0.2;let transactions=JSON.parse(localStorage.getItem('transactions')||'[]');let savings=parseFloat(localStorage.getItem('savings')||'0');let customSuggestions={};let expenseCategories=[{icon:'🍔',name:'Nourriture',color:'#ff6b6b'},{icon:'🚗',name:'Transport',color:'#4ecdc4'},{icon:'🏠',name:'Logement',color:'#95e1d3'},{icon:'📶',name:'Internet',color:'#ffd93d'},{icon:'💡',name:'Énergie',color:'#f8b400'},{icon:'❤️',name:'Santé',color:'#ff9ff3'},{icon:'🎉',name:'Loisirs',color:'#a29bfe'},{icon:'🛍️',name:'Achats',color:'#ff8b94'}];let incomeCategories=[{icon:'💰',name:'Salaire',color:'#4ecdc4'},{icon:'📈',name:'Business',color:'#ffd93d'},{icon:'🎁',name:'Autre',color:'#95e1d3'}];let selectedCategory=null;let monthlyBudget=Number(localStorage.getItem('monthlyBudget')||0);let peopleCount=Number(localStorage.getItem('peopleCount')||1);let payRent=localStorage.getItem('payRent')==='true';let selectedProfile=localStorage.getItem('selectedProfile')||'balanced';loadCustomData();function formatAr(v){return new Intl.NumberFormat('fr-FR').format(v)+' Ar'}function loadCustomData(){try{const saved=JSON.parse(localStorage.getItem('customSuggestions')||'{}');customSuggestions=saved}catch(e){}}function saveCustomData(){localStorage.setItem('customSuggestions',JSON.stringify(customSuggestions));}const budgetProfiles={security:{withRent:{Logement:0.35,Nourriture:0.20,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.05,Épargne:0.20},noRent:{Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.10,Épargne:0.45}},balanced:{withRent:{Logement:0.35,Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.10,Épargne:0.10},noRent:{Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.20,Épargne:0.35}},comfort:{withRent:{Logement:0.35,Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.15,Épargne:0.05},noRent:{Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.30,Épargne:0.25}}};function getTotalBudget(){const income=getIncomeThisMonth();return monthlyBudget+income;}function getIncomeThisMonth(){const now=new Date();const thisMonth=now.getMonth();const thisYear=now.getFullYear();return transactions.filter(t=>{const date=new Date(t.date);return date.getMonth()===thisMonth&&date.getFullYear()===thisYear&&t.amount>0}).reduce((s,t)=>s+t.amount,0);}function updateCategories(){const type=document.getElementById('type').value;const grid=document.getElementById('categories');const cats=type==='expense'?expenseCategories:incomeCategories;grid.innerHTML=cats.map((c,i)=>`<div class="category-btn${i===selectedCategory?' active':''}" onclick="selectCategory(${i})" title="${c.name}">${c.icon}</div>`).join('');selectedCategory=null;}function selectCategory(i){selectedCategory=i;updateCategories();}function addTransaction(e){e.preventDefault();const type=document.getElementById('type').value;const amount=Number(document.getElementById('amount').value);const desc=document.getElementById('description').value;if(selectedCategory===null){alert('Choisissez une catégorie');return;}const cats=type==='expense'?expenseCategories:incomeCategories;const cat=cats[selectedCategory];const value=type==='expense'?-amount:amount;const currentBalance=transactions.reduce((s,t)=>s+t.amount,0);const projectedBalance=currentBalance+value;if(type==='income'){const maxSavings=amount*MAX_SAVINGS_RATE;let effectiveSavings=0;if(projectedBalance-maxSavings>=MIN_RESTE_A_VIVRE){effectiveSavings=maxSavings;}else{effectiveSavings=Math.max(0,maxSavings-(MIN_RESTE_A_VIVRE-(projectedBalance-maxSavings)));}savings+=effectiveSavings;transactions.unshift({id:Date.now(),amount:value-effectiveSavings,description:desc+(effectiveSavings>0?' (épargne:'+formatAr(effectiveSavings)+')':''),icon:cat.icon,category:cat.name,color:cat.color,date:new Date()});}else{transactions.unshift({id:Date.now(),amount:value,description:desc,icon:cat.icon,category:cat.name,color:cat.color,date:new Date()});}localStorage.setItem('transactions',JSON.stringify(transactions));localStorage.setItem('savings',savings);closeModal();renderAll();}function renderAll(){renderTransactions();updateStats();renderSuggestions();renderEnvelopes();}function renderTransactions(){const s=document.getElementById('search').value.toLowerCase();const list=document.getElementById('transactionsList');list.innerHTML=transactions.filter(t=>t.description.toLowerCase().includes(s)||t.category.toLowerCase().includes(s)).slice(0,10).map(t=>`<div class="transaction-item" onclick="deleteTransaction(${t.id})"><div class="transaction-info"><div class="transaction-icon" style="background:${t.color}20">${t.icon}</div><div>${t.description}<br><small>${t.category} · ${new Date(t.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</small></div></div><div class="transaction-amount" style="color:${t.amount>0?'#4ecdc4':'#ff6b6b'}">${t.amount>0?'+':''}${formatAr(Math.abs(t.amount))}</div></div>`).join('')||'<p>Aucune transaction</p>';}function updateStats(){const balance=transactions.reduce((s,t)=>s+t.amount,0);const income=transactions.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0);const expenses=Math.abs(transactions.filter(t=>t.amount<0).reduce((s,t)=>s+t.amount,0));const totalBudget=getTotalBudget();document.getElementById('totalBudget').textContent=formatAr(totalBudget);document.getElementById('budgetDetail').textContent=`${formatAr(monthlyBudget)} prévu + ${formatAr(income)} reçus`;document.getElementById('balance').textContent=formatAr(balance);document.getElementById('income').textContent=formatAr(income);document.getElementById('expenses').textContent=formatAr(expenses);document.getElementById('count').textContent=transactions.length;document.getElementById('savings').textContent=formatAr(savings);}function deleteTransaction(id){if(confirm('Supprimer ?')){transactions=transactions.filter(t=>t.id!==id);localStorage.setItem('transactions',JSON.stringify(transactions));renderAll();}}function openModal(){document.getElementById('modal').style.display='flex';updateCategories();}function closeModal(){document.getElementById('modal').style.display='none';}function toggleTheme(){document.body.classList.toggle('light');}function saveConfig(){monthlyBudget=Number(document.getElementById('monthlyBudget').value||0);peopleCount=Number(document.getElementById('peopleCount').value||1);payRent=document.getElementById('payRent').checked;localStorage.setItem('monthlyBudget',monthlyBudget);localStorage.setItem('peopleCount',peopleCount);localStorage.setItem('payRent',payRent);renderAll();}function selectProfile(profile){selectedProfile=profile;localStorage.setItem('selectedProfile',profile);document.querySelectorAll('.profile-badge').forEach(b=>{b.classList.toggle('active',b.dataset.profile===profile);});renderAll();}function getCurrentRules(){const profile=budgetProfiles[selectedProfile]||budgetProfiles.balanced;return payRent?profile.withRent:profile.noRent;}function getSuggestions(){const totalBudget=getTotalBudget();if(totalBudget<=0)return null;const rules=getCurrentRules();const suggestions={};let totalAssigned=0;for(const cat in rules){const amount=Math.round(totalBudget*rules[cat]);if(amount>0){suggestions[cat]=customSuggestions[cat]||amount;totalAssigned+=suggestions[cat];}}const diff=totalBudget-totalAssigned;if(suggestions['Épargne']!=null)suggestions['Épargne']+=diff;return suggestions;}function renderSuggestions(){const container=document.getElementById('suggestionList');if(!container)return;const suggestions=getSuggestions();if(!suggestions){container.innerHTML='<p class="balance-label">Entrez un budget ou ajoutez des revenus pour voir les suggestions</p>';return;}const totalBudget=getTotalBudget();container.innerHTML=Object.entries(suggestions).map(([cat,amount])=>`<div class="transaction-item suggestion-editable" onclick="editSuggestion('${cat}',${amount})" style="margin-bottom:8px"><div class="transaction-info"><strong>${cat}</strong></div><div class="transaction-amount">${formatAr(amount)}</div></div>`).join('');}function editSuggestion(category,currentAmount){const newAmount=prompt(`Budget pour ${category} (${formatAr(currentAmount)}):`,currentAmount);if(newAmount!==null&&newAmount!==''){const amount=Number(newAmount);if(amount>=0){customSuggestions[category]=amount;saveCustomData();renderAll();}}}function getCategoryStats(){const suggestions=getSuggestions();const result={};if(suggestions){Object.keys(suggestions).forEach(cat=>{result[cat]={allocated:suggestions[cat],spent:0};});}transactions.forEach(t=>{if(t.amount<0&&result[t.category]){result[t.category].spent+=Math.abs(t.amount);}});return result;}function renderEnvelopes(){const container=document.getElementById('envelopesList');if(!container)return;const stats=getCategoryStats();const keys=Object.keys(stats);if(keys.length===0){container.innerHTML='<p class="balance-label">Ajoutez des transactions pour voir les enveloppes</p>';return;}container.innerHTML=keys.map(cat=>{const{allocated,spent}=stats[cat];const remaining=allocated-spent;const over=remaining<0;const percent=Math.round((spent/allocated)*100);return`<div class="envelope-row${over?' envelope-warning':''}" onclick="editSuggestion('${cat}',${allocated})"><div><div class="envelope-name">${cat}</div><div style="font-size:12px;opacity:0.8">${over?'⚠ Dépassé':'✅ '+percent+'% utilisé'}</div></div><div class="envelope-amount">${formatAr(spent)} / ${formatAr(allocated)}<br><small>${over?formatAr(Math.abs(remaining)):formatAr(remaining)} restant</small></div></div>`;}).join('');}function openCategoryModal(){document.getElementById('categoryModal').style.display='flex';renderCategoryModal();}function closeCategoryModal(){document.getElementById('categoryModal').style.display='none';}function renderCategoryModal(){const list=document.getElementById('expenseCategoriesList');list.innerHTML=expenseCategories.map((cat,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.1);margin-bottom:5px"><span>${cat.icon} ${cat.name}</span><button onclick="removeExpenseCategory(${i})" style="background:#ff6b6b;color:white;border:none;border-radius:4px;padding:4px 8px;font-size:12px;cursor:pointer">Supprimer</button></div>`).join('');}function addExpenseCategory(){const name=document.getElementById('newExpenseCategory').value.trim();const icon=document.getElementById('newExpenseIcon').value.trim()||'💰';if(name){expenseCategories.push({icon,name,color:'#a29bfe'});document.getElementById('newExpenseCategory').value='';document.getElementById('newExpenseIcon').value='';renderCategoryModal();localStorage.setItem('expenseCategories',JSON.stringify(expenseCategories));}}function removeExpenseCategory(index){expenseCategories.splice(index,1);renderCategoryModal();localStorage.setItem('expenseCategories',JSON.stringify(expenseCategories));}function saveCategories(){localStorage.setItem('expenseCategories',JSON.stringify(expenseCategories));closeCategoryModal();renderAll();}function exportData(){const data={transactions,savings,monthlyBudget,peopleCount,payRent,selectedProfile,customSuggestions,expenseCategories};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='budget-pro.json';a.click();}// INITdocument.getElementById('monthlyBudget').value=monthlyBudget||'';document.getElementById('peopleCount').value=peopleCount||1;document.getElementById('payRent').checked=payRent;if(localStorage.getItem('expenseCategories')){try{expenseCategories=JSON.parse(localStorage.getItem('expenseCategories'));}catch(e){}}selectProfile(selectedProfile);renderAll();</script></body></html>
+const MIN_RESTE_A_VIVRE = 50000;
+const MAX_SAVINGS_RATE = 0.2;
+
+let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+let savings = parseFloat(localStorage.getItem('savings') || '0');
+let customSuggestions = {};
+let expenseCategories = [
+  {icon:'🍔',name:'Nourriture',color:'#ff6b6b'},
+  {icon:'🚗',name:'Transport',color:'#4ecdc4'},
+  {icon:'🏠',name:'Logement',color:'#95e1d3'},
+  {icon:'📶',name:'Internet',color:'#ffd93d'},
+  {icon:'💡',name:'Énergie',color:'#f8b400'},
+  {icon:'❤️',name:'Santé',color:'#ff9ff3'},
+  {icon:'🎉',name:'Loisirs',color:'#a29bfe'},
+  {icon:'🛍️',name:'Achats',color:'#ff8b94'}
+];
+let incomeCategories = [
+  {icon:'💰',name:'Salaire',color:'#4ecdc4'},
+  {icon:'📈',name:'Business',color:'#ffd93d'},
+  {icon:'🎁',name:'Autre',color:'#95e1d3'}
+];
+
+let selectedCategoryIndex = -1;
+let monthlyBudget = Number(localStorage.getItem('monthlyBudget') || 0);
+let peopleCount = Number(localStorage.getItem('peopleCount') || 1);
+let payRent = localStorage.getItem('payRent') === 'true';
+let selectedProfile = localStorage.getItem('selectedProfile') || 'balanced';
+
+function formatAr(v) {
+  return new Intl.NumberFormat('fr-FR').format(v) + ' Ar';
+}
+
+function loadCustomData() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('customSuggestions') || '{}');
+    customSuggestions = saved;
+    if (localStorage.getItem('expenseCategories')) {
+      expenseCategories = JSON.parse(localStorage.getItem('expenseCategories'));
+    }
+  } catch(e) {}
+}
+
+function saveCustomData() {
+  localStorage.setItem('customSuggestions', JSON.stringify(customSuggestions));
+}
+
+const budgetProfiles = {
+  security: {
+    withRent: {Logement:0.35,Nourriture:0.20,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.05,Épargne:0.20},
+    noRent: {Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.10,Épargne:0.45}
+  },
+  balanced: {
+    withRent: {Logement:0.35,Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.10,Épargne:0.10},
+    noRent: {Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.20,Épargne:0.35}
+  },
+  comfort: {
+    withRent: {Logement:0.35,Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.15,Épargne:0.05},
+    noRent: {Nourriture:0.25,Transport:0.10,"Autres essentiels":0.10,Loisirs:0.30,Épargne:0.25}
+  }
+};
+
+function getTotalBudget() {
+  const income = getIncomeThisMonth();
+  return monthlyBudget + income;
+}
+
+function getIncomeThisMonth() {
+  const now = new Date();
+  const thisMonth = now.getMonth();
+  const thisYear = now.getFullYear();
+  return transactions.filter(t => {
+    const date = new Date(t.date);
+    return date.getMonth() === thisMonth && date.getFullYear() === thisYear && t.amount > 0;
+  }).reduce((s, t) => s + t.amount, 0);
+}
+
+function updateCategories() {
+  const type = document.getElementById('type').value;
+  const grid = document.getElementById('categories');
+  const info = document.getElementById('selectedCatInfo');
+  const cats = type === 'expense' ? expenseCategories : incomeCategories;
+  
+  grid.innerHTML = cats.map((c, i) => 
+    `<div class="category-btn ${i === selectedCategoryIndex ? 'active' : ''}" 
+       onclick="selectCategory(${i})" 
+       title="${c.name}">${c.icon}</div>`
+  ).join('');
+  
+  if (selectedCategoryIndex >= 0 && selectedCategoryIndex < cats.length) {
+    info.textContent = `✅ ${cats[selectedCategoryIndex].name} sélectionnée`;
+    info.style.background = 'rgba(76, 205, 196, 0.2)';
+  } else {
+    info.textContent = '⚠️ Cliquez sur une icône pour sélectionner';
+    info.style.background = 'rgba(63, 81, 181, 0.1)';
+  }
+}
+
+function selectCategory(index) {
+  selectedCategoryIndex = index;
+  updateCategories();
+}
+
+function openModal() {
+  document.getElementById('modal').style.display = 'flex';
+  selectedCategoryIndex = -1;
+  document.getElementById('amount').value = '';
+  document.getElementById('description').value = '';
+  updateCategories();
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+  selectedCategoryIndex = -1;
+}
+
+function addTransaction(e) {
+  e.preventDefault();
+  
+  if (selectedCategoryIndex === -1) {
+    alert('⚠️ Choisissez une catégorie en cliquant sur une icône !');
+    return;
+  }
+  
+  const type = document.getElementById('type').value;
+  const amount = Number(document.getElementById('amount').value);
+  const desc = document.getElementById('description').value;
+  
+  const cats = type === 'expense' ? expenseCategories : incomeCategories;
+  const cat = cats[selectedCategoryIndex];
+  const value = type === 'expense' ? -amount : amount;
+  
+  const currentBalance = transactions.reduce((s, t) => s + t.amount, 0);
+  const projectedBalance = currentBalance + value;
+  
+  let finalAmount = value;
+  let savingsText = '';
+  
+  if (type === 'income') {
+    const maxSavings = amount * MAX_SAVINGS_RATE;
+    let effectiveSavings = 0;
+    
+    if (projectedBalance - maxSavings >= MIN_RESTE_A_VIVRE) {
+      effectiveSavings = maxSavings;
+    } else {
+      effectiveSavings = Math.max(0, maxSavings - (MIN_RESTE_A_VIVRE - (projectedBalance - maxSavings)));
+    }
+    
+    savings += effectiveSavings;
+    finalAmount = value - effectiveSavings;
+    savingsText = effectiveSavings > 0 ? ` (épargne: ${formatAr(effectiveSavings)})` : '';
+    localStorage.setItem('savings', savings);
+  }
+  
+  transactions.unshift({
+    id: Date.now(),
+    amount: finalAmount,
+    description: desc + savingsText,
+    icon: cat.icon,
+    category: cat.name,
+    color: cat.color,
+    date: new Date()
+  });
+  
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+  closeModal();
+  renderAll();
+}
+
+function renderAll() {
+  renderTransactions();
+  updateStats();
+  renderSuggestions();
+  renderEnvelopes();
+}
+
+function renderTransactions() {
+  const s = document.getElementById('search').value.toLowerCase();
+  const list = document.getElementById('transactionsList');
+  list.innerHTML = transactions
+    .filter(t => t.description.toLowerCase().includes(s) || t.category.toLowerCase().includes(s))
+    .slice(0, 10)
+    .map(t => `
+      <div class="transaction-item" onclick="deleteTransaction(${t.id})">
+        <div class="transaction-info">
+          <div class="transaction-icon" style="background:${t.color}20">${t.icon}</div>
+          <div>${t.description}<br><small>${t.category} · ${new Date(t.date).toLocaleDateString('fr-FR', {day:'numeric', month:'short'})}</small></div>
+        </div>
+        <div class="transaction-amount" style="color:${t.amount > 0 ? '#4ecdc4' : '#ff6b6b'}">
+          ${t.amount > 0 ? '+' : ''}${formatAr(Math.abs(t.amount))}
+        </div>
+      </div>
+    `).join('') || '<p>Aucune transaction</p>';
+}
+
+function updateStats() {
+  const balance = transactions.reduce((s, t) => s + t.amount, 0);
+  const income = transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+  const expenses = Math.abs(transactions.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0));
+  const totalBudget = getTotalBudget();
+  
+  document.getElementById('totalBudget').textContent = formatAr(totalBudget);
+  document.getElementById('budgetDetail').textContent = `${formatAr(monthlyBudget)} prévu + ${formatAr(income)} reçus`;
+  document.getElementById('balance').textContent = formatAr(balance);
+  document.getElementById('income').textContent = formatAr(income);
+  document.getElementById('expenses').textContent = formatAr(expenses);
+  document.getElementById('count').textContent = transactions.length;
+  document.getElementById('savings').textContent = formatAr(savings);
+}
+
+function deleteTransaction(id) {
+  if (confirm('Supprimer cette transaction ?')) {
+    transactions = transactions.filter(t => t.id !== id);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    renderAll();
+  }
+}
+
+function saveConfig() {
+  monthlyBudget = Number(document.getElementById('monthlyBudget').value || 0);
+  peopleCount = Number(document.getElementById('peopleCount').value || 1);
+  payRent = document.getElementById('payRent').checked;
+  localStorage.setItem('monthlyBudget', monthlyBudget);
+  localStorage.setItem('peopleCount', peopleCount);
+  localStorage.setItem('payRent', payRent);
+  renderAll();
+}
+
+function selectProfile(profile) {
+  selectedProfile = profile;
+  localStorage.setItem('selectedProfile', profile);
+  document.querySelectorAll('.profile-badge').forEach(b => {
+    b.classList.toggle('active', b.dataset.profile === profile);
+  });
+  renderAll();
+}
+
+document.getElementById('profileBadges').addEventListener('click', function(e) {
+  if (e.target.dataset.profile) {
+    selectProfile(e.target.dataset.profile);
+  }
+});
+
+function getCurrentRules() {
+  const profile = budgetProfiles[selectedProfile] || budgetProfiles.balanced;
+  return payRent ? profile.withRent : profile.noRent;
+}
+
+function getSuggestions() {
+  const totalBudget = getTotalBudget();
+  if (totalBudget <= 0) return null;
+  
+  const rules = getCurrentRules();
+  const suggestions = {};
+  let totalAssigned = 0;
+  
+  for (const cat in rules) {
+    const amount = Math.round(totalBudget * rules[cat]);
+    if (amount > 0) {
+      suggestions[cat] = customSuggestions[cat] || amount;
+      totalAssigned += suggestions[cat];
+    }
+  }
+  
+  const diff = totalBudget - totalAssigned;
+  if (suggestions['Épargne'] != null) suggestions['Épargne'] += diff;
+  
+  return suggestions;
+}
+
+function renderSuggestions() {
+  const container = document.getElementById('suggestionList');
+  if (!container) return;
+  
+  const suggestions = getSuggestions();
+  if (!suggestions) {
+    container.innerHTML = '<p class="balance-label">Entrez un budget ou ajoutez des revenus</p>';
+    return;
+  }
+  
+  container.innerHTML = Object.entries(suggestions).map(([cat, amount]) => `
+    <div class="transaction-item suggestion-editable" onclick="editSuggestion('${cat}', ${amount})" style="margin-bottom:8px">
+      <div class="transaction-info"><strong>${cat}</strong></div>
+      <div class="transaction-amount">${formatAr(amount)}</div>
+    </div>
+  `).join('');
+}
+
+function editSuggestion(category, currentAmount) {
+  const newAmount = prompt(`Budget pour ${category} (${formatAr(currentAmount)}):`, currentAmount);
+  if (newAmount !== null && newAmount !== '') {
+    const amount = Number(newAmount);
+    if (amount >= 0) {
+      customSuggestions[category] = amount;
+      saveCustomData();
+      renderAll();
+    }
+  }
+}
+
+function getCategoryStats() {
+  const suggestions = getSuggestions();
+  const result = {};
+  
+  if (suggestions) {
+    Object.keys(suggestions).forEach(cat => {
+      result[cat] = {allocated: suggestions[cat], spent: 0};
+    });
+  }
+  
+  transactions.forEach(t => {
+    if (t.amount < 0 && result[t.category]) {
+      result[t.category].spent += Math.abs(t.amount);
+    }
+  });
+  
+  return result;
+}
+
+function renderEnvelopes() {
+  const container = document.getElementById('envelopesList');
+  if (!container) return;
+  
+  const stats = getCategoryStats();
+  const keys = Object.keys(stats);
+  
+  if (keys.length === 0) {
+    container.innerHTML = '<p class="balance-label">Ajoutez des transactions pour voir les enveloppes</p>';
+    return;
+  }
+  
+  container.innerHTML = keys.map(cat => {
+    const {allocated, spent} = stats[cat];
+    const remaining = allocated - spent;
+    const over = remaining < 0;
+    const percent = Math.round((spent / allocated) * 100);
+    
+    return `
+      <div class="envelope-row ${over ? 'envelope-warning' : ''}" onclick="editSuggestion('${cat}', ${allocated})">
+        <div>
+          <div class="envelope-name">${cat}</div>
+          <div style="font-size:12px;opacity:0.8">
+            ${over ? '⚠️ Dépassé' : '✅ ' + percent + '% utilisé'}
+          </div>
+        </div>
+        <div class="envelope-amount">
+          ${formatAr(spent)} / ${formatAr(allocated)}<br>
+          <small>${over ? formatAr(Math.abs(remaining)) : formatAr(remaining)} restant</small>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openCategoryModal() {
+  document.getElementById('categoryModal').style.display = 'flex';
+  renderCategoryModal();
+}
+
+function closeCategoryModal() {
+  document.getElementById('categoryModal').style.display = 'none';
+}
+
+function renderCategoryModal() {
+  const list = document.getElementById('expenseCategoriesList');
+  list.innerHTML = expenseCategories.map((cat, i) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.1);margin-bottom:5px">
+      <span>${cat.icon} ${cat.name}</span>
+      <button onclick="removeExpenseCategory(${i})" style="background:#ff6b6b;color:white;border:none;border-radius:4px;padding:4px 8px;font-size:12px;cursor:pointer">Supprimer</button>
+    </div>
+  `).join('');
+}
+
+function addExpenseCategory() {
+  const name = document.getElementById('newExpenseCategory').value.trim();
+  const icon = document.getElementById('newExpenseIcon').value.trim() || '💰';
+  if (name) {
+    expenseCategories.push({icon, name, color: '#a29bfe'});
+    document.getElementById('newExpenseCategory').value = '';
+    document.getElementById('newExpenseIcon').value = '';
+    renderCategoryModal();
+    localStorage.setItem('expenseCategories', JSON.stringify(expenseCategories));
+  }
+}
+
+function removeExpenseCategory(index) {
+  expenseCategories.splice(index, 1);
+  renderCategoryModal();
+  localStorage.setItem('expenseCategories', JSON.stringify(expenseCategories));
+}
+
+function saveCategories() {
+  localStorage.setItem('expenseCategories', JSON.stringify(expenseCategories));
+  closeCategoryModal();
+  renderAll();
+}
+
+function exportData() {
+  const data = {transactions, savings, monthlyBudget, peopleCount, payRent, selectedProfile, customSuggestions, expenseCategories};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'budget-pro.json';
+  a.click();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+}
+
+// INITIALISATION
+loadCustomData();
+document.getElementById('monthlyBudget').value = monthlyBudget || '';
+document.getElementById('peopleCount').value = peopleCount || 1;
+document.getElementById('payRent').checked = payRent;
+selectProfile(selectedProfile);
+renderAll();
+</script>
+</body>
+</html>
