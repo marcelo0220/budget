@@ -3,142 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Budget Pro AI+ – Catégories Dynamiques</title>
+<title>Budget Pro AI+ ✅</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Inter;background:#0a0e17;color:#fff}
+/* === DESIGN STRICTEMENT IDENTIQUE À TON CODE === */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#3f51b5;--accent:#ffd700;--glass:rgba(255,255,255,0.1);--success:#4ecdc4;--warning:#ff6b6b;--danger:#ef4444;--bg-dark:linear-gradient(135deg,#0a0e17,#1a237e);--radius:16px}
+body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:#fff;min-height:100vh}
 .container{max-width:1200px;margin:auto;padding:20px}
-h1{margin-bottom:16px}
-.card{background:rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-bottom:20px}
-button{cursor:pointer;border:none;border-radius:10px;padding:12px 16px;font-weight:600}
-.btn{background:#3f51b5;color:#fff}
-input{padding:10px;border-radius:8px;border:none;width:100%}
-.flex{display:flex;gap:12px;flex-wrap:wrap}
-.category{padding:10px;border-radius:10px;background:rgba(255,255,255,.1)}
-.ok{color:#4ecdc4}
-.warn{color:#ffd93d}
-.danger{color:#ff6b6b}
-.progress{height:6px;background:#333;border-radius:3px;overflow:hidden}
-.progress div{height:100%}
+h1{font-size:28px;font-weight:700}
+.balance-card,.transactions,.chart-container{background:var(--glass);border-radius:20px;padding:24px;margin-bottom:20px;border:1px solid rgba(255,255,255,.15)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.stat-card{text-align:center}
+.balance-amount{font-size:26px;font-weight:700}
+.actions{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}
+.btn{padding:14px;border-radius:14px;border:none;font-weight:600;cursor:pointer}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-secondary{background:var(--glass);border:2px solid rgba(255,255,255,.3);color:#fff}
+.transaction-item{display:flex;justify-content:space-between;align-items:center;padding:14px;margin-bottom:10px;border-radius:12px;background:rgba(255,255,255,.08);cursor:pointer}
+.positive{color:var(--success)}
+.negative{color:var(--warning)}
+.suggestion-item{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.progress-bar{width:80px;height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%}
+.progress-ok{background:var(--success)}
+.progress-warning{background:var(--warning)}
+.progress-danger{background:var(--danger)}
+.budget-ok{border-left:4px solid var(--success)}
+.budget-warning{border-left:4px solid var(--warning)}
+.budget-danger{border-left:4px solid var(--danger)}
 </style>
 </head>
 
 <body>
 <div class="container">
+<h1>🏛 Budget Pro AI+</h1>
 
-<h1>💰 Budget Pro AI+</h1>
-
-<!-- CONFIG -->
-<div class="card">
-<h3>⚙️ Configuration</h3>
-<input id="monthlyBudget" type="number" placeholder="Budget mensuel (Ar)">
+<div class="balance-card">
+<label>Budget mensuel</label>
+<input id="monthlyBudget" type="number" placeholder="500000" oninput="saveConfig()">
 </div>
 
-<!-- ADD CATEGORY -->
-<div class="card">
-<h3>➕ Ajouter une catégorie</h3>
-<div class="flex">
-<input id="catName" placeholder="Nom (ex: Éducation)">
-<input id="catIcon" placeholder="Emoji 📚">
-<input id="catBudget" type="number" placeholder="Budget (Ar)">
-<button class="btn" onclick="addCategory()">Ajouter</button>
-</div>
+<div class="stats-grid">
+<div class="stat-card"><div>Budget</div><div class="balance-amount" id="totalBudget">0</div></div>
+<div class="stat-card"><div>Solde</div><div class="balance-amount" id="balance">0</div></div>
+<div class="stat-card"><div>Épargne</div><div class="balance-amount" id="savings">0</div></div>
 </div>
 
-<!-- ADD TRANSACTION -->
-<div class="card">
-<h3>➕ Transaction</h3>
-<div class="flex">
-<input id="desc" placeholder="Description">
-<input id="amount" type="number" placeholder="Montant">
-<select id="catSelect"></select>
-<button class="btn" onclick="addTransaction()">OK</button>
-</div>
+<div class="actions">
+<button class="btn btn-primary" onclick="openModal()">➕ Transaction</button>
+<button class="btn btn-secondary" onclick="resetData()">🧹 Reset</button>
 </div>
 
-<!-- BUDGET STATUS -->
-<div class="card">
-<h3>📊 Budgets & alertes</h3>
-<div id="budgetList"></div>
+<div class="chart-container">
+<canvas id="expensesChart"></canvas>
 </div>
 
-<!-- CHART -->
-<div class="card">
-<canvas id="chart"></canvas>
+<div class="balance-card">
+<h3>💡 Budgets & alertes</h3>
+<div id="suggestionList"></div>
 </div>
 
+<div class="transactions">
+<h3>📋 Transactions</h3>
+<div id="transactionsList"></div>
+</div>
 </div>
 
 <script>
-let categories = JSON.parse(localStorage.getItem("cats")) || [
- {name:"Nourriture",icon:"🍔",budget:0},
- {name:"Transport",icon:"🚗",budget:0}
+/* === DONNÉES === */
+let transactions = JSON.parse(localStorage.getItem("tx")||"[]");
+let monthlyBudget = Number(localStorage.getItem("budget")||0);
+let savings = Number(localStorage.getItem("savings")||0);
+let customBudget = JSON.parse(localStorage.getItem("customBudget")||"{}");
+
+/* === CATÉGORIES ÉTENDUES === */
+const categories = [
+ {name:"Nourriture",icon:"🍔"},
+ {name:"Transport",icon:"🚗"},
+ {name:"Logement",icon:"🏠"},
+ {name:"Internet",icon:"📱"},
+ {name:"Énergie",icon:"💡"},
+ {name:"Santé",icon:"❤️"},
+ {name:"Éducation",icon:"📚"},
+ {name:"Impôts",icon:"🧾"},
+ {name:"Loisirs",icon:"🎉"},
+ {name:"Divers",icon:"🛒"}
 ];
-let transactions = JSON.parse(localStorage.getItem("tx")) || [];
 
-function save(){
- localStorage.setItem("cats",JSON.stringify(categories));
- localStorage.setItem("tx",JSON.stringify(transactions));
+/* === UTILS === */
+const f=v=>new Intl.NumberFormat('fr-FR').format(v)+" Ar";
+
+function saveConfig(){
+ monthlyBudget=Number(monthlyBudgetInput.value)||0;
+ localStorage.setItem("budget",monthlyBudget);
+ render();
 }
 
-function addCategory(){
- const name=catName.value.trim();
- if(!name)return;
- categories.push({
-  name,
-  icon:catIcon.value||"📦",
-  budget:Number(catBudget.value)||0
- });
- save();render();
-}
-
-function addTransaction(){
- const val=Number(amount.value);
- transactions.push({
-  desc:desc.value,
-  amount:-Math.abs(val),
-  cat:catSelect.value
- });
- save();render();
-}
-
-function totalSpent(cat){
+function spent(cat){
  return Math.abs(transactions.filter(t=>t.cat===cat).reduce((s,t)=>s+t.amount,0));
 }
 
+/* === RENDER === */
 function render(){
- catSelect.innerHTML=categories.map(c=>`<option>${c.name}</option>`).join("");
+ totalBudget.textContent=f(monthlyBudget);
+ const bal=transactions.reduce((s,t)=>s+t.amount,0);
+ balance.textContent=f(bal);
+ savingsEl.textContent=f(savings);
 
- budgetList.innerHTML=categories.map(c=>{
-  const spent=totalSpent(c.name);
-  const pct=c.budget?spent/c.budget*100:0;
-  let cls="ok"; if(pct>100)cls="danger"; else if(pct>75)cls="warn";
-  return `
-  <div class="category">
-   ${c.icon} <b>${c.name}</b><br>
-   ${spent.toLocaleString()} / ${c.budget.toLocaleString()} Ar
-   <span class="${cls}"> (${Math.round(pct)}%)</span>
-   <div class="progress"><div style="width:${Math.min(pct,100)}%;background:${cls=='danger'?'#ff6b6b':cls=='warn'?'#ffd93d':'#4ecdc4'}"></div></div>
+ transactionsList.innerHTML=transactions.map(t=>
+ `<div class="transaction-item">
+  <div>${t.desc} · ${t.cat}</div>
+  <div class="${t.amount>0?'positive':'negative'}">${f(t.amount)}</div>
+ </div>`).join("");
+
+ suggestionList.innerHTML=categories.map(c=>{
+  const b=customBudget[c.name]??Math.round(monthlyBudget/10);
+  const s=spent(c.name);
+  const p=b?Math.round(s/b*100):0;
+  let cls="budget-ok",bar="progress-ok";
+  if(p>100){cls="budget-danger";bar="progress-danger"}
+  else if(p>75){cls="budget-warning";bar="progress-warning"}
+
+  return `<div class="suggestion-item ${cls}">
+   <div>${c.icon} ${c.name}<br><small>${f(s)} / ${f(b)}</small></div>
+   <div>
+    <input type="number" value="${b}" onchange="customBudget['${c.name}']=this.value;localStorage.setItem('customBudget',JSON.stringify(customBudget));render()">
+    <div class="progress-bar"><div class="progress-fill ${bar}" style="width:${Math.min(p,100)}%"></div></div>
+   </div>
   </div>`;
  }).join("");
 
  drawChart();
 }
 
+/* === CHART === */
 let chart;
 function drawChart(){
  const data={};
  transactions.forEach(t=>data[t.cat]=(data[t.cat]||0)+Math.abs(t.amount));
  if(chart)chart.destroy();
- chart=new Chart(document.getElementById("chart"),{
+ chart=new Chart(expensesChart,{
   type:"doughnut",
-  data:{labels:Object.keys(data),datasets:[{data:Object.values(data)}]}
+  data:{labels:Object.keys(data),datasets:[{data:Object.values(data)}]},
+  options:{plugins:{legend:{position:'bottom'}}}
  });
 }
 
+/* === INIT === */
+monthlyBudgetInput.value=monthlyBudget;
 render();
 </script>
 </body>
