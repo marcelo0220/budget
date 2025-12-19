@@ -166,6 +166,38 @@ h1{font-size:20px}
 
 <!-- HOME SECTION -->
 <div id="home-section" class="section active">
+<!-- STATS -->
+<div class="stats-grid">
+<div class="stat-card"><div class="balance-label">💰 Budget total</div><div class="balance-amount" id="totalBudget">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">💵 Solde actuel</div><div class="balance-amount" id="balance">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">💎 Épargne</div><div class="balance-amount" id="savings">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">⚠️ Reste à vivre</div><div class="balance-amount" id="resteAVivre">0 Ar</div></div>
+</div>
+
+<!-- ACTIONS -->
+<div class="actions">
+<button class="btn btn-primary" onclick="openModal()">➕ Nouvelle transaction</button>
+<button class="btn btn-secondary" onclick="undo()">↶ Annuler</button>
+<button class="btn btn-secondary" onclick="redo()">↷ Refaire</button>
+<button class="btn btn-secondary" onclick="exportData()">📊 Exporter</button>
+<button class="btn btn-secondary" onclick="resetData()">🧹 Reset</button>
+<button class="btn btn-secondary" onclick="generateReport()">📈 Rapport</button>
+</div>
+
+<!-- CHART -->
+<div class="chart-container">
+<canvas id="expensesChart" width="400" height="200"></canvas>
+</div>
+
+<!-- SUGGESTIONS avec ALERTES -->
+<div class="balance-card">
+<h3 style="margin-bottom:16px">💡 Budget suggéré <span style="font-size:14px;opacity:0.7">(modifiable + alertes)</span></h3>
+<div id="suggestionList"></div>
+</div>
+</div>
+
+<!-- SETTINGS SECTION -->
+<div id="settings-section" class="section">
 <!-- CONFIG -->
 <div class="balance-card">
 <div class="balance-label">⚙️ Configuration</div>
@@ -194,33 +226,23 @@ h1{font-size:20px}
 </div>
 </div>
 
-<!-- STATS -->
-<div class="stats-grid">
-<div class="stat-card"><div class="balance-label">💰 Budget total</div><div class="balance-amount" id="totalBudget">0 Ar</div></div>
-<div class="stat-card"><div class="balance-label">💵 Solde actuel</div><div class="balance-amount" id="balance">0 Ar</div></div>
-<div class="stat-card"><div class="balance-label">💎 Épargne</div><div class="balance-amount" id="savings">0 Ar</div></div>
-<div class="stat-card"><div class="balance-label">⚠️ Reste à vivre</div><div class="balance-amount" id="resteAVivre">0 Ar</div></div>
+<!-- ADDITIONAL SETTINGS -->
+<div class="balance-card">
+<h3 style="margin-bottom:16px">🎨 Apparence</h3>
+<div class="form-group">
+<label>Thème</label>
+<div style="display:flex;gap:12px">
+<button class="btn btn-secondary" onclick="toggleTheme()">🌙 Basculer thème</button>
+</div>
+</div>
 </div>
 
-<!-- ACTIONS -->
+<div class="balance-card">
+<h3 style="margin-bottom:16px">💾 Données</h3>
 <div class="actions">
-<button class="btn btn-primary" onclick="openModal()">➕ Nouvelle transaction</button>
-<button class="btn btn-secondary" onclick="undo()">↶ Annuler</button>
-<button class="btn btn-secondary" onclick="redo()">↷ Refaire</button>
 <button class="btn btn-secondary" onclick="exportData()">📊 Exporter</button>
 <button class="btn btn-secondary" onclick="resetData()">🧹 Reset</button>
-<button class="btn btn-secondary" onclick="generateReport()">📈 Rapport</button>
 </div>
-
-<!-- CHART -->
-<div class="chart-container">
-<canvas id="expensesChart" width="400" height="200"></canvas>
-</div>
-
-<!-- SUGGESTIONS avec ALERTES -->
-<div class="balance-card">
-<h3 style="margin-bottom:16px">💡 Budget suggéré <span style="font-size:14px;opacity:0.7">(modifiable + alertes)</span></h3>
-<div id="suggestionList"></div>
 </div>
 </div>
 
@@ -256,18 +278,22 @@ h1{font-size:20px}
 
 <!-- BOTTOM NAVIGATION -->
 <div class="bottom-nav">
-<div class="nav-item active" onclick="showSection('home-section')">
+<a href="#" class="nav-item active" onclick="showSection('home-section', event); return false;">
 <div class="nav-icon">🏠</div>
 <span>Accueil</span>
-</div>
-<div class="nav-item" onclick="showSection('balance-section')">
+</a>
+<a href="#" class="nav-item" onclick="showSection('balance-section', event); return false;">
 <div class="nav-icon">💰</div>
 <span>Solde</span>
-</div>
-<div class="nav-item" onclick="showSection('objectives-section')">
+</a>
+<a href="#" class="nav-item" onclick="showSection('objectives-section', event); return false;">
 <div class="nav-icon">🎯</div>
 <span>Objectifs</span>
-</div>
+</a>
+<a href="#" class="nav-item" onclick="showSection('settings-section', event); return false;">
+<div class="nav-icon">⚙️</div>
+<span>Paramètres</span>
+</a>
 </div>
 
 <!-- TOAST -->
@@ -536,6 +562,13 @@ document.getElementById('balance').textContent = formatAr(balance);
 document.getElementById('savings').textContent = formatAr(savings);
 document.getElementById('resteAVivre').textContent = formatAr(resteAVivre);
 document.getElementById('resteAVivre').style.color = resteAVivre < minReste ? '#ff6b6b' : '#4ecdc4';
+
+// Update balance section stats
+document.getElementById('totalBudget2').textContent = formatAr(getTotalBudget());
+document.getElementById('balance2').textContent = formatAr(balance);
+document.getElementById('savings2').textContent = formatAr(savings);
+document.getElementById('resteAVivre2').textContent = formatAr(resteAVivre);
+document.getElementById('resteAVivre2').style.color = resteAVivre < minReste ? '#ff6b6b' : '#4ecdc4';
 }
 
 function renderSuggestions() {
@@ -825,36 +858,3 @@ showToast('↶ Annulé');
 } else {
 showToast('❌ Rien à annuler');
 }
-}
-
-function redo() {
-if (historyIndex < history.length - 1) {
-historyIndex++;
-const state = history[historyIndex];
-transactions = JSON.parse(JSON.stringify(state.transactions));
-goals = JSON.parse(JSON.stringify(state.goals));
-savings = state.savings;
-localStorage.setItem('budgetProTransactions', JSON.stringify(transactions));
-localStorage.setItem('budgetProGoals', JSON.stringify(goals));
-localStorage.setItem('budgetProSavings', savings);
-renderAll();
-showToast('↷ Refait');
-} else {
-showToast('❌ Rien à refaire');
-}
-}
-
-function showSection(sectionId) {
-document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-document.getElementById(sectionId).classList.add('active');
-document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-event.target.closest('.nav-item').classList.add('active');
-if (sectionId === 'balance-section') {
-renderTransactions();
-} else if (sectionId === 'objectives-section') {
-renderGoals();
-}
-}
-</script>
-</body>
-</html>
