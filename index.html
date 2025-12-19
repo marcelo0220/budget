@@ -3,284 +3,407 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Budget Pro - IA</title>
+<title>Budget Pro AI - Corrigé</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}:root{--primary:linear-gradient(135deg,#1a237e,#3f51b5);--accent:#ffd700;--glass:rgba(255,255,255,.1);--success:#4ecdc4;--warning:#ff6b6b;--shadow:0 20px 40px rgba(0,0,0,.2)}body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#0a0e27,#1a237e);color:#fff;min-height:100vh}body.light{background:linear-gradient(135deg,#e3f2fd,#bbdefb);color:#1a237e}.container{max-width:1200px;margin:auto;padding:20px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.theme-toggle{width:50px;height:50px;border-radius:50%;background:var(--glass);border:1px solid rgba(255,255,255,.2);cursor:pointer;font-size:20px}.balance-card{background:var(--glass);backdrop-filter:blur(20px);border-radius:24px;padding:24px 20px;margin-bottom:18px;border:1px solid rgba(255,255,255,.2)}.balance-label{opacity:.8;font-weight:600;font-size:13px}.balance-amount{font-size:32px;font-weight:700;margin:10px 0;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:20px}.stat-card{background:var(--glass);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.2)}.stat-label{opacity:.7;font-size:13px}.stat-value{font-size:20px;font-weight:600}.positive{color:var(--success)}.negative{color:var(--warning)}.actions{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}.btn{flex:1;min-width:120px;padding:12px;border:none;border-radius:14px;font-weight:600;cursor:pointer}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:var(--glass);border:1px solid rgba(255,255,255,.2);color:#fff}.btn-ai{background:linear-gradient(135deg,#4ecdc4,#26a69a);color:#fff}.search-box{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:var(--glass);color:#fff;margin-bottom:18px}.transactions,.envelopes,.charts{background:var(--glass);padding:20px;border-radius:24px;border:1px solid rgba(255,255,255,.2);margin-bottom:18px}.transactions h3,.envelopes h3{margin-bottom:10px;font-size:18px}.transaction-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:12px;margin-bottom:8px;background:rgba(255,255,255,.05);cursor:pointer}.transaction-info{display:flex;gap:12px;align-items:center}.transaction-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}.transaction-amount{font-size:16px;font-weight:600}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);align-items:flex-end;z-index:20}.modal-content{background:#fff;color:#1a237e;width:100%;max-width:600px;margin:auto;border-radius:24px 24px 0 0;padding:24px;max-height:90vh;overflow-y:auto}.form-group{margin-bottom:14px}.form-group label{font-weight:600;font-size:14px;display:block;margin-bottom:4px}.form-group input,.form-group select{width:100%;padding:10px;border-radius:12px;border:2px solid rgba(26,35,126,.2)}.form-inline{display:flex;align-items:center;gap:8px;margin-top:6px}.form-inline input[type="checkbox"]{width:auto}.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.category-btn{padding:10px;border-radius:12px;border:2px solid rgba(26,35,126,.2);cursor:pointer;font-size:20px;text-align:center;transition:all .2s}.category-btn:hover{background:rgba(63,81,181,.1)}.category-btn.active{border-color:var(--accent);background:rgba(255,215,0,.2);transform:scale(1.05)}.cat-info{font-size:12px;opacity:.8;margin-top:5px;padding:6px;background:var(--glass);border-radius:6px}.envelope-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer}.envelope-row:last-child{border-bottom:none}.envelope-row:hover{background:rgba(255,255,255,.05)}.envelope-name{font-weight:600;font-size:14px}.envelope-amount{font-size:14px}.profile-badges{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.profile-badge{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.3);font-size:12px;cursor:pointer;transition:all .2s}.profile-badge:hover{background:rgba(255,255,255,.1)}.profile-badge.active{background:rgba(255,215,0,.2);border-color:var(--accent)}.toast{position:fixed;top:20px;right:20px;background:var(--success);color:white;padding:16px 20px;border-radius:12px;box-shadow:var(--shadow);z-index:100;display:none;animation:slideIn .3s}.toast.warning{background:var(--warning)}.toast.success{background:var(--success)}@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}.progress-bar{background:rgba(255,255,255,.1);border-radius:12px;padding:2px;margin:8px 0}.progress-fill{background:linear-gradient(90deg,var(--success),var(--accent));height:20px;border-radius:10px;transition:width .3s}.history-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}.history-card{background:var(--glass);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.2)}.ai-coach{background:linear-gradient(135deg,#4ecdc4,#26a69a);cursor:pointer;padding:20px;border-radius:24px;margin-bottom:20px;text-align:center}.ai-coach:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(78,205,196,.3)}</style>
+* {margin:0;padding:0;box-sizing:border-box}
+:root {
+  --primary: linear-gradient(135deg,#1a237e,#3f51b5);
+  --accent: #ffd700;
+  --glass: rgba(255,255,255,.1);
+  --success: #4ecdc4;
+  --warning: #ff6b6b;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg,#0a0e27,#1a237e);
+  color: #fff;
+  min-height: 100vh;
+}
+.container {max-width: 1200px; margin: auto; padding: 20px}
+.balance-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,.2);
+}
+.balance-label {opacity: .8; font-weight: 600; font-size: 13px}
+.balance-amount {
+  font-size: 32px; font-weight: 700; margin: 10px 0;
+  background: linear-gradient(135deg,#fff,var(--accent));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+  gap: 15px; margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--glass); padding: 16px; border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.2);
+}
+.actions {display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap}
+.btn {
+  flex: 1; min-width: 120px; padding: 12px; border: none;
+  border-radius: 14px; font-weight: 600; cursor: pointer;
+}
+.btn-primary {background: var(--primary); color: #fff}
+.btn-secondary {background: var(--glass); border: 1px solid rgba(255,255,255,.2); color: #fff}
+.search-box {
+  width: 100%; padding: 12px; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.2); background: var(--glass);
+  color: #fff; margin-bottom: 18px;
+}
+.transaction-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px; border-radius: 12px; margin-bottom: 8px;
+  background: rgba(255,255,255,.05); cursor: pointer;
+}
+.modal {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8);
+  backdrop-filter: blur(10px); align-items: flex-end; z-index: 20;
+}
+.modal-content {
+  background: #fff; color: #1a237e; width: 100%; max-width: 600px;
+  margin: auto; border-radius: 24px 24px 0 0; padding: 24px;
+  max-height: 90vh; overflow-y: auto;
+}
+.form-group {margin-bottom: 14px}
+.form-group label {font-weight: 600; font-size: 14px; display: block; margin-bottom: 4px}
+.form-group input, .form-group select {
+  width: 100%; padding: 10px; border-radius: 12px; border: 2px solid rgba(26,35,126,.2)
+}
+.category-grid {display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 8px}
+.category-btn {
+  padding: 10px; border-radius: 12px; border: 2px solid rgba(26,35,126,.2);
+  cursor: pointer; font-size: 20px; text-align: center; transition: all .2s;
+}
+.category-btn:hover {background: rgba(63,81,181,.1)}
+.category-btn.active {border-color: var(--accent); background: rgba(255,215,0,.2); transform: scale(1.05)}
+.cat-info {font-size: 12px; opacity: .8; margin-top: 5px; padding: 6px; background: rgba(63,81,181,.1); border-radius: 6px}
+.toast {
+  position: fixed; top: 20px; right: 20px; padding: 16px 20px;
+  border-radius: 12px; z-index: 100; display: none; color: white;
+}
+</style>
 </head>
 <body>
 <div class="container">
-<header><h1>Budget Pro AI</h1><button class="theme-toggle" onclick="toggleTheme()">🌙</button></header>
+  <header>
+    <h1>Budget Pro</h1>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  </header>
 
-<!-- CONFIG -->
-<div class="balance-card">
-  <div class="balance-label">⚙️ Configuration</div>
-  <div class="form-group">
-    <label>Budget prévu (Ar)</label>
-    <input type="number" id="monthlyBudget" oninput="saveConfig()">
-  </div>
-  <div class="form-group">
-    <label>Personnes au foyer</label>
-    <input type="number" id="peopleCount" min="1" value="1" oninput="saveConfig()">
-  </div>
-  <div class="form-group">
-    <label>Logement</label>
-    <div class="form-inline">
+  <!-- CONFIG -->
+  <div class="balance-card">
+    <div class="balance-label">Configuration</div>
+    <div class="form-group">
+      <label>Budget prévu (Ar)</label>
+      <input type="number" id="monthlyBudget" oninput="saveConfig()">
+    </div>
+    <div class="form-group">
+      <label>Personnes</label>
+      <input type="number" id="peopleCount" min="1" value="1" oninput="saveConfig()">
+    </div>
+    <div class="form-group">
+      <label>Paye loyer?</label>
       <input type="checkbox" id="payRent" onchange="saveConfig()">
-      <span>Je paye loyer/crédit</span>
     </div>
   </div>
-  <div class="form-group">
-    <label>Profil</label>
-    <div class="profile-badges" id="profileBadges">
-      <div class="profile-badge active" data-profile="balanced">⚖️ Équilibré</div>
-      <div class="profile-badge" data-profile="security">🛡️ Sécurité</div>
-      <div class="profile-badge" data-profile="comfort">🎉 Confort</div>
+
+  <!-- STATS PRINCIPALES -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="balance-label">Budget total</div>
+      <div class="balance-amount" id="totalBudget">0 Ar</div>
+    </div>
+    <div class="stat-card">
+      <div class="balance-label">Solde actuel</div>
+      <div class="balance-amount" id="balance">0 Ar</div>
+    </div>
+    <div class="stat-card">
+      <div class="balance-label">Épargne</div>
+      <div class="balance-amount" id="savings">0 Ar</div>
     </div>
   </div>
-</div>
 
-<!-- AI COACH -->
-<div class="ai-coach" onclick="showAICoach()">
-  💬 Coach IA : "Clique pour des conseils personnalisés"
-</div>
-
-<!-- BUDGET & SOLDE -->
-<div class="stats-grid">
-  <div class="stat-card">
-    <div class="balance-label">💰 Budget total</div>
-    <div class="balance-amount" id="totalBudget">0 Ar</div>
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn btn-primary" onclick="openModal()">➕ Ajouter</button>
+    <button class="btn btn-secondary" onclick="exportData()">📊 Export</button>
+    <button class="btn btn-secondary" onclick="resetData()">🧹 Reset</button>
   </div>
-  <div class="stat-card">
-    <div class="balance-label">💵 Solde actuel</div>
-    <div class="balance-amount" id="balance">0 Ar</div>
+
+  <input class="search-box" placeholder="🔍 Rechercher..." id="search" oninput="renderTransactions()">
+
+  <!-- SUGGESTIONS -->
+  <div class="balance-card">
+    <h3>💡 Suggestions (clique pour modifier)</h3>
+    <div id="suggestionList"></div>
   </div>
-  <div class="stat-card">
-    <div class="balance-label">💎 Épargne</div>
-    <div class="balance-amount" id="savings">0 Ar</div>
-  </div>
-</div>
 
-<!-- ACTIONS -->
-<div class="actions">
-  <button class="btn btn-primary" onclick="openModal()">➕ Transaction</button>
-  <button class="btn btn-secondary" onclick="openCategoryModal()">📂 Catégories</button>
-  <button class="btn btn-ai" onclick="showAICoach()">🤖 IA Coach</button>
-</div>
-
-<input class="search-box" placeholder="🔍 Recherche..." id="search" oninput="renderTransactions()">
-
-<!-- GRAPHIQUES -->
-<div class="charts">
-  <h3>📊 Vue d'ensemble</h3>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-    <canvas id="budgetChart" height="200"></canvas>
-    <canvas id="balanceChart" height="200"></canvas>
+  <!-- TRANSACTIONS -->
+  <div class="balance-card">
+    <h3>Transactions</h3>
+    <div id="transactionsList"></div>
   </div>
 </div>
 
-<!-- ALERTES & OBJECTIFS -->
-<div class="balance-card">
-  <h3>🎯 Objectifs & Alertes</h3>
-  <div id="alerts"></div>
-  <div id="goals"></div>
-</div>
-
-<!-- SUGGESTIONS -->
-<div class="balance-card">
-  <h3>💡 Budget suggéré</h3>
-  <div id="suggestionList"></div>
-</div>
-
-<!-- ENVELOPES -->
-<div class="envelopes">
-  <h3>📦 Enveloppes</h3>
-  <div id="envelopesList"></div>
-</div>
-
-<!-- HISTORIQUE -->
-<div class="balance-card">
-  <h3>📅 Historique</h3>
-  <div class="history-grid" id="history"></div>
-</div>
-
-<!-- TRANSACTIONS -->
-<div class="transactions">
-  <h3>📋 Transactions</h3>
-  <div id="transactionsList"></div>
-</div>
-</div>
-
-<!-- TOAST ALERTES -->
-<div class="toast" id="toast"></div>
-
-<!-- MODALES (même code que précédemment, raccourci ici) -->
-<div class="modal" id="modal"><!-- Transaction modal --></div>
-<div class="modal" id="categoryModal"><!-- Catégories modal --></div>
-<div class="modal" id="aiModal">
+<!-- MODAL TRANSACTION -->
+<div class="modal" id="modal">
   <div class="modal-content">
-    <h2>🤖 Coach IA</h2>
-    <div id="aiAdvice" style="white-space:pre-line;font-size:16px;line-height:1.5;padding:20px;background:var(--glass);border-radius:12px"></div>
-    <div style="display:flex;gap:10px;margin-top:20px">
-      <button class="btn btn-primary" onclick="closeAIModal()">OK</button>
-    </div>
+    <h2>Nouvelle transaction</h2>
+    <form onsubmit="addTransaction(event)">
+      <div class="form-group">
+        <label>Type</label>
+        <select id="type" onchange="updateCategories()">
+          <option value="expense">Dépense</option>
+          <option value="income">Revenu</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Montant (Ar)</label>
+        <input type="number" id="amount" required min="0">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" id="description" required>
+      </div>
+      <div class="form-group">
+        <label>Catégorie</label>
+        <div class="category-grid" id="categories"></div>
+        <div id="selectedCatInfo" class="cat-info">⚠️ Cliquez sur une icône</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" type="submit">✅ Valider</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">❌ Annuler</button>
+      </div>
+    </form>
   </div>
 </div>
+
+<!-- TOAST -->
+<div class="toast success" id="toast"></div>
 
 <script>
-// === VARIABLES GLOBALES (même que précédemment) ===
 const MIN_RESTE_A_VIVRE = 50000;
 const MAX_SAVINGS_RATE = 0.2;
+
+// DONNÉES PERSISTANTES
 let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
 let savings = parseFloat(localStorage.getItem('savings') || '0');
-let customSuggestions = {};
-let expenseCategories = [{icon:'🍔',name:'Nourriture',color:'#ff6b6b'},{icon:'🚗',name:'Transport',color:'#4ecdc4'},{icon:'🏠',name:'Logement',color:'#95e1d3'},{icon:'📶',name:'Internet',color:'#ffd93d'},{icon:'💡',name:'Énergie',color:'#f8b400'},{icon:'❤️',name:'Santé',color:'#ff9ff3'},{icon:'🎉',name:'Loisirs',color:'#a29bfe'},{icon:'🛍️',name:'Achats',color:'#ff8b94'}];
-let incomeCategories = [{icon:'💰',name:'Salaire',color:'#4ecdc4'},{icon:'📈',name:'Business',color:'#ffd93d'},{icon:'🎁',name:'Autre',color:'#95e1d3'}];
-let selectedCategoryIndex = -1;
 let monthlyBudget = Number(localStorage.getItem('monthlyBudget') || 0);
 let peopleCount = Number(localStorage.getItem('peopleCount') || 1);
 let payRent = localStorage.getItem('payRent') === 'true';
-let selectedProfile = localStorage.getItem('selectedProfile') || 'balanced';
-let budgetChart, balanceChart;
 
-// === FONCTIONS BASE (mêmes que précédemment) ===
-function formatAr(v){return new Intl.NumberFormat('fr-FR').format(v)+' Ar'}
-function getTotalBudget(){const income=getIncomeThisMonth();return monthlyBudget+income;}
-function getIncomeThisMonth(){/* même logique */return 0;}
+// CATÉGORIES
+const expenseCategories = [
+  {icon:'🍔',name:'Nourriture',color:'#ff6b6b'},
+  {icon:'🚗',name:'Transport',color:'#4ecdc4'},
+  {icon:'🏠',name:'Logement',color:'#95e1d3'},
+  {icon:'📱',name:'Internet',color:'#ffd93d'}
+];
+const incomeCategories = [
+  {icon:'💰',name:'Salaire',color:'#4ecdc4'},
+  {icon:'📈',name:'Business',color:'#ffd93d'}
+];
 
-// === NOUVELLES FONCTIONNALITÉS ===
+let selectedCategoryIndex = -1;
 
-function showToast(message, type='success') {
+function formatAr(v) {
+  return new Intl.NumberFormat('fr-FR').format(v) + ' Ar';
+}
+
+function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
   toast.textContent = message;
   toast.className = `toast ${type}`;
   toast.style.display = 'block';
-  setTimeout(() => toast.style.display = 'none', 4000);
+  setTimeout(() => toast.style.display = 'none', 3000);
 }
 
-function checkAlerts() {
-  const stats = getCategoryStats();
-  Object.values(stats).forEach(stat => {
-    const percent = (stat.spent / stat.allocated) * 100;
-    if (percent > 90) showToast(`⚠️ ${stat.category}: ${Math.round(percent)}% consommé`, 'warning');
-    if (percent > 100) showToast(`🚨 ${stat.category}: Budget dépassé de ${formatAr(stat.spent - stat.allocated)}`, 'warning');
-  });
+function updateCategories() {
+  const type = document.getElementById('type').value;
+  const grid = document.getElementById('categories');
+  const info = document.getElementById('selectedCatInfo');
+  const cats = type === 'expense' ? expenseCategories : incomeCategories;
   
-  if (savings > getTotalBudget() * 0.1) showToast('🎉 Objectif épargne 10% atteint !', 'success');
+  grid.innerHTML = cats.map((c, i) => 
+    `<div class="category-btn ${i === selectedCategoryIndex ? 'active' : ''}" 
+       onclick="selectCategory(${i})" title="${c.name}">${c.icon}</div>`
+  ).join('');
+  
+  if (selectedCategoryIndex >= 0 && selectedCategoryIndex < cats.length) {
+    info.textContent = `✅ ${cats[selectedCategoryIndex].name} sélectionnée`;
+  } else {
+    info.textContent = '⚠️ Cliquez sur une icône pour sélectionner';
+  }
 }
 
-function renderAlerts() {
-  const container = document.getElementById('alerts');
-  const stats = getCategoryStats();
-  let html = '';
+function selectCategory(index) {
+  selectedCategoryIndex = index;
+  updateCategories();
+}
+
+function openModal() {
+  document.getElementById('modal').style.display = 'flex';
+  selectedCategoryIndex = -1;
+  document.getElementById('amount').value = '';
+  document.getElementById('description').value = '';
+  updateCategories();
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+  selectedCategoryIndex = -1;
+}
+
+function addTransaction(e) {
+  e.preventDefault();
   
-  Object.values(stats).forEach(stat => {
-    const percent = (stat.spent / stat.allocated) * 100;
-    if (percent > 85) {
-      html += `<div class="progress-bar"><div class="progress-fill" style="width:${Math.min(percent,100)}%"></div></div><small>${stat.category}: ${Math.round(percent)}%</small>`;
+  if (selectedCategoryIndex === -1) {
+    showToast('⚠️ Choisissez une catégorie !', 'warning');
+    return;
+  }
+  
+  const type = document.getElementById('type').value;
+  const amount = Number(document.getElementById('amount').value);
+  const desc = document.getElementById('description').value;
+  
+  const cats = type === 'expense' ? expenseCategories : incomeCategories;
+  const cat = cats[selectedCategoryIndex];
+  const value = type === 'expense' ? -amount : amount;
+  
+  let finalAmount = value;
+  let savingsText = '';
+  
+  if (type === 'income') {
+    const maxSavings = amount * MAX_SAVINGS_RATE;
+    const currentBalance = transactions.reduce((s, t) => s + t.amount, 0);
+    const projectedBalance = currentBalance + value;
+    
+    let effectiveSavings = 0;
+    if (projectedBalance - maxSavings >= MIN_RESTE_A_VIVRE) {
+      effectiveSavings = maxSavings;
     }
+    
+    savings += effectiveSavings;
+    finalAmount = value - effectiveSavings;
+    savingsText = effectiveSavings > 0 ? ` (épargne: ${formatAr(effectiveSavings)})` : '';
+    localStorage.setItem('savings', savings);
+  }
+  
+  transactions.unshift({
+    id: Date.now(),
+    amount: finalAmount,
+    description: desc + savingsText,
+    icon: cat.icon,
+    category: cat.name,
+    color: cat.color || '#4ecdc4',
+    date: new Date()
   });
-  container.innerHTML = html || '<small>✅ Tout est sous contrôle</small>';
+  
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+  closeModal();
+  renderAll();
+  showToast('✅ Transaction ajoutée !');
 }
 
-function renderGoals() {
-  const container = document.getElementById('goals');
-  const totalBudget = getTotalBudget();
-  const savingsRate = (savings / totalBudget) * 100;
-  container.innerHTML = `
-    <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(savingsRate,100)}%"></div></div>
-    <small>Épargne: ${Math.round(savingsRate)}% (${formatAr(savings)})</small>
-  `;
-}
-
-function renderCharts() {
-  // Budget Chart
-  const ctx1 = document.getElementById('budgetChart').getContext('2d');
-  const stats = getCategoryStats();
-  if (budgetChart) budgetChart.destroy();
-  budgetChart = new Chart(ctx1, {
-    type: 'doughnut',
-    data: {
-      labels: Object.keys(stats).slice(0,6),
-      datasets: [{data: Object.values(stats).slice(0,6).map(s=>s.spent),backgroundColor:['#ff6b6b','#4ecdc4','#95e1d3','#ffd93d','#f8b400','#ff9ff3']}]
-    },
-    options: {responsive:true,plugins:{legend:{position:'bottom'}}}
-  });
-
-  // Balance Chart (30 derniers jours)
-  const ctx2 = document.getElementById('balanceChart').getContext('2d');
-  const recent = transactions.slice(0,30).map(t=>({x:new Date(t.date),y:t.amount}));
-  if (balanceChart) balanceChart.destroy();
-  balanceChart = new Chart(ctx2, {
-    type: 'line',
-    data: {datasets:[{label:'Solde',data:recent,borderColor:var(--accent),fill:false}]},
-    options: {responsive:true,scales:{x:{type:'time'}}}
-  });
-}
-
-function renderHistory() {
-  const container = document.getElementById('history');
-  // Simulation 3 derniers mois
-  const months = ['Nov 25','Déc 25','Jan 26'];
-  const data = [
-    {income:1200000,expenses:950000,savings:150000},
-    {income:1300000,expenses:1000000,savings:250000},
-    {income:1400000,expenses:1100000,savings:300000}
-  ];
-  container.innerHTML = data.map((m,i)=>`
-    <div class="history-card">
-      <div style="font-size:24px;font-weight:700">${months[i]}</div>
-      <div>+${formatAr(m.income)} revenus</div>
-      <div>-${formatAr(m.expenses)} dépenses</div>
-      <div style="color:var(--success)">+${formatAr(m.savings)} épargne</div>
+function renderTransactions() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const list = document.getElementById('transactionsList');
+  
+  const filtered = transactions.filter(t => 
+    t.description.toLowerCase().includes(search) || 
+    t.category.toLowerCase().includes(search)
+  ).slice(0, 10);
+  
+  list.innerHTML = filtered.map(t => `
+    <div class="transaction-item" onclick="deleteTransaction(${t.id})">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="transaction-icon" style="background:${t.color}20">${t.icon}</div>
+        <div>
+          ${t.description}
+          <br><small>${t.category} · ${new Date(t.date).toLocaleDateString('fr-FR')}</small>
+        </div>
+      </div>
+      <div style="color:${t.amount > 0 ? '#4ecdc4' : '#ff6b6b'}; font-weight:600">
+        ${t.amount > 0 ? '+' : ''}${formatAr(Math.abs(t.amount))}
+      </div>
     </div>
-  `).join('');
+  `).join('') || '<p>Aucune transaction</p>';
 }
 
-function showAICoach() {
-  const stats = getCategoryStats();
-  const totalBudget = getTotalBudget();
-  const savingsRate = (savings / totalBudget) * 100;
-  let advice = `📊 Analyse de ton budget (${formatAr(totalBudget)}):\n\n`;
+function updateStats() {
+  const balance = transactions.reduce((s, t) => s + t.amount, 0);
+  const income = transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+  const expenses = Math.abs(transactions.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0));
+  const totalBudget = monthlyBudget + income;
   
-  // Top conseils personnalisés
-  if (savingsRate > 20) advice += '✅ Excellent ! Ton épargne est parfaite (>20%)\n';
-  else advice += `💰 Conseil: Augmente ton épargne (${Math.round(savingsRate)}% → vise 20%)\n`;
-  
-  Object.values(stats).forEach(stat => {
-    const percent = (stat.spent / stat.allocated) * 100;
-    if (percent > 110) advice += `⚠️ ${stat.category}: Tu as dépassé de ${Math.round(percent-100)}%\n`;
-    else if (percent < 70) advice += `🎉 ${stat.category}: Tu as ${Math.round(100-percent)}% restant\n`;
-  });
-  
-  advice += `\n🎯 Action rapide: ${savings > 100000 ? 'Continue !' : 'Ajoute un revenu ou réduis Loisirs'}`;
-  document.getElementById('aiAdvice').textContent = advice;
-  document.getElementById('aiModal').style.display = 'flex';
+  document.getElementById('totalBudget').textContent = formatAr(totalBudget);
+  document.getElementById('balance').textContent = formatAr(balance);
+  document.getElementById('savings').textContent = formatAr(savings);
 }
 
-function closeAIModal() {
-  document.getElementById('aiModal').style.display = 'none';
+function renderAll() {
+  renderTransactions();
+  updateStats();
 }
 
-// === INITIALISATION COMPLÈTE ===
-loadCustomData();
+function deleteTransaction(id) {
+  if (confirm('Supprimer cette transaction ?')) {
+    transactions = transactions.filter(t => t.id !== id);
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    renderAll();
+    showToast('🗑️ Transaction supprimée');
+  }
+}
+
+function saveConfig() {
+  monthlyBudget = Number(document.getElementById('monthlyBudget').value || 0);
+  peopleCount = Number(document.getElementById('peopleCount').value || 1);
+  payRent = document.getElementById('payRent').checked;
+  
+  localStorage.setItem('monthlyBudget', monthlyBudget);
+  localStorage.setItem('peopleCount', peopleCount);
+  localStorage.setItem('payRent', payRent);
+  
+  renderAll();
+  showToast('⚙️ Configuration sauvegardée');
+}
+
+function exportData() {
+  const data = {transactions, savings, monthlyBudget, peopleCount, payRent};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'budget.json';
+  a.click();
+  showToast('📊 Données exportées');
+}
+
+function resetData() {
+  if (confirm('Réinitialiser TOUTES les données ?')) {
+    transactions = [];
+    savings = 0;
+    localStorage.clear();
+    renderAll();
+    showToast('🧹 Données réinitialisées', 'warning');
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+}
+
+// INITIALISATION
 document.getElementById('monthlyBudget').value = monthlyBudget;
 document.getElementById('peopleCount').value = peopleCount;
 document.getElementById('payRent').checked = payRent;
-selectProfile(selectedProfile);
 
-function initApp() {
-  renderAll();
-  renderCharts();
-  renderAlerts();
-  renderGoals();
-  renderHistory();
-  checkAlerts();
-  setInterval(checkAlerts, 30000); // Vérif toutes les 30s
-}
-
-initApp();
+renderAll();
 </script>
 </body>
 </html>
