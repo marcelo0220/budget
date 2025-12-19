@@ -57,7 +57,7 @@ h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#fff,#ffd700
 .profile-badge:hover{background:rgba(255,255,255,0.2);transform:translateY(-2px)}
 .profile-badge.active{background:rgba(255,215,0,0.3);border-color:var(--accent)}
 .chart-container{background:var(--glass);border-radius:20px;padding:20px;margin:20px 0;border:1px solid rgba(255,255,255,0.15)}
-.toast{position:fixed;top:24px;right:24px;background:var(--success);color:#fff;padding:16px 24px;border-radius:12px;z-index:2000;font-weight:600;cursor:pointer;transform:translateX(400px);transition:all 0.4s}
+.toast{position:fixed;top:24px;right:calc(24px + var(--scrollbar-width, 0px));background:var(--success);color:#fff;padding:16px 24px;border-radius:12px;z-index:2000;font-weight:600;cursor:pointer;transform:translateX(400px);transition:all 0.4s}
 .toast.show{transform:translateX(0)}
 .suggestion-item{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid rgba(255,255,255,0.1);transition:all 0.2s;cursor:pointer}
 .suggestion-item:hover{background:rgba(255,255,255,0.1)}
@@ -138,11 +138,17 @@ h1{font-size:20px}
 .cat-info{font-size:12px;padding:8px}
 .profile-badges{gap:6px}
 .profile-badge{padding:8px 12px;font-size:11px}
-.toast{top:12px;right:12px;left:12px;padding:10px 14px;font-size:13px}
+.toast{top:12px;left:50%;transform:translateX(-50%);padding:10px 14px;font-size:13px;max-width:calc(100% - 24px)}
 .suggestion-item{padding:12px}
 .suggestion-item input{width:120px;padding:8px;font-size:13px}
 .progress-bar{width:60px}
 .spent-info{font-size:11px}
+}
+
+/* FIX FOR FAB POSITIONING ON SMALL SCREENS */
+@media(max-width:767px){
+:root{--scrollbar-width:0px}
+.fab{bottom:90px}
 }
 #logo img{height:40px;width:auto;vertical-align:middle;margin-right:10px;border-radius: 50%;}
 
@@ -173,7 +179,7 @@ h1{font-size:20px}
 <div id="home-section" class="section active">
 <!-- WELCOME CARD -->
 <div class="balance-card">
-<h3 style="margin-bottom:8px">👋 Bienvenue sur Budget Pro AI+</h3>
+<h3 style="margin-bottom:8px">👋 Bienvenue sur Budget Pro</h3>
 <p style="font-size:14px;opacity:0.8;margin:0">Gérez votre budget intelligemment avec des suggestions personnalisées, des alertes et un suivi en temps réel de vos finances.</p>
 </div>
 
@@ -419,8 +425,10 @@ toast.style.display = 'none';
 function hideToast() {
 const toast = document.getElementById('toast');
 toast.classList.remove('show');
+toast.style.transform = 'translateX(400px)';
 setTimeout(() => {
 toast.style.display = 'none';
+toast.style.transform = '';
 }, 400);
 }
 
