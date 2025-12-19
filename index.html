@@ -145,6 +145,16 @@ h1{font-size:20px}
 .spent-info{font-size:11px}
 }
 #logo img{height:40px;width:auto;vertical-align:middle;margin-right:10px;border-radius: 50%;}
+
+/* BOTTOM NAVIGATION */
+.section{display:none}
+.section.active{display:block}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--glass);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.15);z-index:1000;display:flex}
+.nav-item{flex:1;padding:12px;text-align:center;cursor:pointer;transition:all 0.3s;font-size:12px;color:rgba(255,255,255,0.7);display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav-item.active{color:var(--accent)}
+.nav-item:hover{color:#fff}
+.nav-icon{font-size:20px}
+.container{padding-bottom:80px}
 </style>
 </head>
 <body>
@@ -154,6 +164,8 @@ h1{font-size:20px}
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
 </header>
 
+<!-- HOME SECTION -->
+<div id="home-section" class="section active">
 <!-- CONFIG -->
 <div class="balance-card">
 <div class="balance-label">⚙️ Configuration</div>
@@ -200,8 +212,6 @@ h1{font-size:20px}
 <button class="btn btn-secondary" onclick="generateReport()">📈 Rapport</button>
 </div>
 
-<input class="search-box" id="searchInput" placeholder="🔍 Recherche transactions..." oninput="renderTransactions()">
-
 <!-- CHART -->
 <div class="chart-container">
 <canvas id="expensesChart" width="400" height="200"></canvas>
@@ -212,18 +222,51 @@ h1{font-size:20px}
 <h3 style="margin-bottom:16px">💡 Budget suggéré <span style="font-size:14px;opacity:0.7">(modifiable + alertes)</span></h3>
 <div id="suggestionList"></div>
 </div>
+</div>
 
+<!-- BALANCE SECTION -->
+<div id="balance-section" class="section">
+<!-- STATS -->
+<div class="stats-grid">
+<div class="stat-card"><div class="balance-label">💰 Budget total</div><div class="balance-amount" id="totalBudget2">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">💵 Solde actuel</div><div class="balance-amount" id="balance2">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">💎 Épargne</div><div class="balance-amount" id="savings2">0 Ar</div></div>
+<div class="stat-card"><div class="balance-label">⚠️ Reste à vivre</div><div class="balance-amount" id="resteAVivre2">0 Ar</div></div>
+</div>
+
+<input class="search-box" id="searchInput" placeholder="🔍 Recherche transactions..." oninput="renderTransactions()">
+
+<!-- TRANSACTIONS -->
+<div class="transactions">
+<h3 style="margin-bottom:20px">📋 Transactions récentes</h3>
+<div id="transactionsList">Aucune transaction</div>
+</div>
+</div>
+
+<!-- OBJECTIVES SECTION -->
+<div id="objectives-section" class="section">
 <!-- OBJECTIFS -->
 <div class="balance-card">
 <h3 style="margin-bottom:16px">🎯 Objectifs d'épargne</h3>
 <div id="goalsList"></div>
 <button class="btn btn-secondary" onclick="openGoalModal()">➕ Nouveau objectif</button>
 </div>
+</div>
+</div>
 
-<!-- TRANSACTIONS -->
-<div class="transactions">
-<h3 style="margin-bottom:20px">📋 Transactions récentes</h3>
-<div id="transactionsList">Aucune transaction</div>
+<!-- BOTTOM NAVIGATION -->
+<div class="bottom-nav">
+<div class="nav-item active" onclick="showSection('home-section')">
+<div class="nav-icon">🏠</div>
+<span>Accueil</span>
+</div>
+<div class="nav-item" onclick="showSection('balance-section')">
+<div class="nav-icon">💰</div>
+<span>Solde</span>
+</div>
+<div class="nav-item" onclick="showSection('objectives-section')">
+<div class="nav-icon">🎯</div>
+<span>Objectifs</span>
 </div>
 </div>
 
@@ -798,6 +841,18 @@ renderAll();
 showToast('↷ Refait');
 } else {
 showToast('❌ Rien à refaire');
+}
+}
+
+function showSection(sectionId) {
+document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+document.getElementById(sectionId).classList.add('active');
+document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+event.target.closest('.nav-item').classList.add('active');
+if (sectionId === 'balance-section') {
+renderTransactions();
+} else if (sectionId === 'objectives-section') {
+renderGoals();
 }
 }
 </script>
