@@ -858,3 +858,36 @@ showToast('↶ Annulé');
 } else {
 showToast('❌ Rien à annuler');
 }
+}
+
+function redo() {
+if (historyIndex < history.length - 1) {
+historyIndex++;
+const state = history[historyIndex];
+transactions = JSON.parse(JSON.stringify(state.transactions));
+goals = JSON.parse(JSON.stringify(state.goals));
+savings = state.savings;
+localStorage.setItem('budgetProTransactions', JSON.stringify(transactions));
+localStorage.setItem('budgetProGoals', JSON.stringify(goals));
+localStorage.setItem('budgetProSavings', savings);
+renderAll();
+showToast('↷ Refait');
+} else {
+showToast('❌ Rien à refaire');
+}
+}
+
+function showSection(sectionId, event) {
+document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+document.getElementById(sectionId).classList.add('active');
+document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+event.target.closest('.nav-item').classList.add('active');
+if (sectionId === 'balance-section') {
+renderTransactions();
+} else if (sectionId === 'objectives-section') {
+renderGoals();
+}
+}
+</script>
+</body>
+</html>
