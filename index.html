@@ -15,6 +15,19 @@ body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:#fff;min-hei
 .light{--glass:rgba(0,0,0,0.1);background:#e0e0e0;color:#2d3748}
 .container{max-width:1200px;margin:auto;padding:20px}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.hamburger{display:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid rgba(255,255,255,0.8);cursor:pointer;font-size:20px;transition:all 0.3s;margin-right:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.hamburger:hover{transform:scale(1.1);box-shadow:0 4px 15px rgba(63,81,181,0.4)}
+.side-drawer{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:var(--glass);backdrop-filter:blur(20px);border-right:1px solid rgba(255,255,255,0.15);z-index:1500;transition:transform 0.3s ease;padding:20px;display:flex;flex-direction:column}
+.side-drawer.open{transform:translateX(300px)}
+.drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1499;display:none;opacity:0;transition:opacity 0.3s}
+.drawer-overlay.active{display:block;opacity:1}
+.drawer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.2)}
+.drawer-close{cursor:pointer;font-size:24px;color:#fff}
+.drawer-nav{display:flex;flex-direction:column;gap:16px}
+.drawer-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;cursor:pointer;transition:all 0.3s;color:#fff;text-decoration:none}
+.drawer-item:hover{background:rgba(255,255,255,0.1);transform:translateX(4px)}
+.drawer-item.active{background:var(--primary);color:#fff}
+.drawer-icon{font-size:20px}
 h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#fff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .theme-toggle{width:50px;height:50px;border-radius:50%;background:var(--glass);border:2px solid rgba(255,255,255,0.3);cursor:pointer;font-size:20px;transition:all 0.3s}
 .balance-card{background:var(--glass);backdrop-filter:blur(20px);border-radius:20px;padding:24px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.15)}
@@ -88,6 +101,7 @@ input:checked+.slider:before{transform:translateX(26px)}
 .modal-content{max-width:90%;padding:20px}
 .form-group input,.form-group select{padding:12px}
 .category-grid{grid-template-columns:repeat(4,1fr)}
+.hamburger{display:flex;align-items:center;justify-content:center}
 }
 
 @media(max-width:576px){
@@ -156,7 +170,7 @@ h1{font-size:20px}
 .section{display:none;opacity:0;transform:translateY(20px);transition:all 0.4s ease}
 .section.active{display:block;opacity:1;transform:translateY(0)}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--glass);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.15);z-index:1000;display:flex}
-.nav-item{flex:1;padding:12px;text-align:center;cursor:pointer;transition:all 0.3s;font-size:12px;color:rgba(255,255,255,0.7);display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav-item{flex:1;padding:10px;text-align:center;cursor:pointer;transition:all 0.3s;font-size:11px;color:rgba(255,255,255,0.7);display:flex;flex-direction:column;align-items:center;gap:2px}
 .nav-item.active{color:var(--accent);transform:scale(1.05)}
 .nav-item:hover{color:#fff;transform:scale(1.05)}
 .nav-icon{font-size:20px}
@@ -171,6 +185,7 @@ h1{font-size:20px}
 <body>
 <div class="container">
 <header>
+<button class="hamburger" onclick="toggleDrawer()">☰</button>
 <h1><span id="logo"><img src="logo.png"></span> Budget Pro</h1>
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
 </header>
@@ -246,10 +261,14 @@ h1{font-size:20px}
 <canvas id="expensesChart" width="400" height="200"></canvas>
 </div>
 
+</div>
+
+<!-- SUGGESTIONS SECTION -->
+<div id="suggestions-section" class="section">
 <!-- SUGGESTIONS avec ALERTES -->
 <div class="balance-card">
 <h3 style="margin-bottom:16px">💡 Budget suggéré <span style="font-size:14px;opacity:0.7">(modifiable + alertes)</span></h3>
-<div id="suggestionList"></div>
+<div id="suggestionList2"></div>
 </div>
 </div>
 
@@ -333,6 +352,52 @@ h1{font-size:20px}
 </div>
 </div>
 
+<!-- SIDE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="side-drawer" id="sideDrawer">
+<div class="drawer-header">
+<h2 style="margin:0;color:#fff">Menu</h2>
+<span class="drawer-close" onclick="closeDrawer()">✕</span>
+</div>
+<div class="drawer-nav">
+<a href="#" class="drawer-item active" onclick="navigateToSection('home-section', event)">
+<span class="drawer-icon">🏠</span>
+<span>Accueil</span>
+</a>
+<a href="#" class="drawer-item" onclick="navigateToSection('balance-section', event)">
+<span class="drawer-icon">💰</span>
+<span>Solde</span>
+</a>
+<a href="#" class="drawer-item" onclick="navigateToSection('objectives-section', event)">
+<span class="drawer-icon">🎯</span>
+<span>Objectifs</span>
+</a>
+<a href="#" class="drawer-item" onclick="navigateToSection('settings-section', event)">
+<span class="drawer-icon">⚙️</span>
+<span>Paramètres</span>
+</a>
+<a href="#" class="drawer-item" onclick="navigateToSection('suggestions-section', event)">
+<span class="drawer-icon">💡</span>
+<span>Budget suggéré</span>
+</a>
+<div style="border-top:1px solid rgba(255,255,255,0.2);margin:20px 0;padding-top:20px;">
+<h3 style="color:#fff;margin-bottom:16px;font-size:16px">Actions rapides</h3>
+<a href="#" class="drawer-item" onclick="openModal()">
+<span class="drawer-icon">➕</span>
+<span>Nouvelle transaction</span>
+</a>
+<a href="#" class="drawer-item" onclick="openGoalModal()">
+<span class="drawer-icon">🎯</span>
+<span>Nouveau objectif</span>
+</a>
+<a href="#" class="drawer-item" onclick="exportData()">
+<span class="drawer-icon">📊</span>
+<span>Exporter données</span>
+</a>
+</div>
+</div>
+</div>
+
 <!-- BOTTOM NAVIGATION -->
 <div class="bottom-nav">
 <a href="#" class="nav-item active" onclick="showSection('home-section', event); return false;">
@@ -342,6 +407,10 @@ h1{font-size:20px}
 <a href="#" class="nav-item" onclick="showSection('balance-section', event); return false;">
 <div class="nav-icon">💰</div>
 <span>Solde</span>
+</a>
+<a href="#" class="nav-item" onclick="showSection('suggestions-section', event); return false;">
+<div class="nav-icon">💡</div>
+<span>Budget</span>
 </a>
 <a href="#" class="nav-item" onclick="showSection('objectives-section', event); return false;">
 <div class="nav-icon">🎯</div>
@@ -656,8 +725,9 @@ document.getElementById('resteAVivre2').style.color = resteAVivre < minReste ? '
 function renderSuggestions() {
 const total = getTotalBudget();
 if (total <= 0) {
-document.getElementById('suggestionList').innerHTML =
-'<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.6)">💡 Entrez un budget pour les suggestions</div>';
+const emptyMessage = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.6)">💡 Entrez un budget pour les suggestions</div>';
+document.getElementById('suggestionList').innerHTML = emptyMessage;
+document.getElementById('suggestionList2').innerHTML = emptyMessage;
 return;
 }
 
@@ -719,6 +789,7 @@ placeholder="${formatAr(suggested)}"
 });
 
 document.getElementById('suggestionList').innerHTML = html;
+document.getElementById('suggestionList2').innerHTML = html;
 }
 
 function updateCustomBudget(category, value) {
@@ -1085,12 +1156,59 @@ function showSection(sectionId, event) {
 document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
 document.getElementById(sectionId).classList.add('active');
 document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+if (event && event.target.closest('.nav-item')) {
 event.target.closest('.nav-item').classList.add('active');
+}
+// Update drawer active state
+document.querySelectorAll('.drawer-item').forEach(item => {
+const href = item.getAttribute('onclick');
+if (href && href.includes(sectionId)) {
+item.classList.add('active');
+} else {
+item.classList.remove('active');
+}
+});
 if (sectionId === 'balance-section') {
 renderTransactions();
 } else if (sectionId === 'objectives-section') {
 renderGoals();
+} else if (sectionId === 'suggestions-section') {
+renderSuggestions();
 }
+}
+
+function toggleDrawer() {
+const drawer = document.getElementById('sideDrawer');
+const overlay = document.getElementById('drawerOverlay');
+drawer.classList.toggle('open');
+overlay.classList.toggle('active');
+document.body.style.overflow = drawer.classList.contains('open') ? 'hidden' : '';
+}
+
+function closeDrawer() {
+const drawer = document.getElementById('sideDrawer');
+const overlay = document.getElementById('drawerOverlay');
+drawer.classList.remove('open');
+overlay.classList.remove('active');
+document.body.style.overflow = '';
+}
+
+function navigateToSection(sectionId, event) {
+event.preventDefault();
+closeDrawer();
+showSection(sectionId, event);
+// Update drawer active state
+document.querySelectorAll('.drawer-item').forEach(item => item.classList.remove('active'));
+event.target.closest('.drawer-item').classList.add('active');
+}
+
+function scrollToSuggestions() {
+setTimeout(() => {
+const suggestionsElement = document.querySelector('.balance-card h3');
+if (suggestionsElement && suggestionsElement.textContent.includes('Budget suggéré')) {
+suggestionsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+}, 100);
 }
 </script>
 </body>
